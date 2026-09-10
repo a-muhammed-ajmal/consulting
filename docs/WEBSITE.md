@@ -441,7 +441,8 @@ code never receives Supabase service-role credentials.
 Every route receives the configured Content Security Policy, clickjacking,
 MIME-sniffing, referrer, permissions, DNS-prefetch, and transport-security
 headers. The policy permits only the origins required by the site and its
-configured Calendly and Vercel Analytics integrations.
+configured Calendly, Vercel Analytics, and Cloudflare Web Analytics
+integrations.
 
 FDI session tokens are signed with `FDI_SESSION_SIGNING_SECRET` when it is
 configured. The existing service-role-key fallback preserves issued-token

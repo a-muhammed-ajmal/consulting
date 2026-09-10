@@ -3,13 +3,13 @@ import { PHASE_TEST } from "next/constants";
 import { resolveCalendlyLink } from "./src/lib/calendly";
 
 const isDevelopment = process.env.NODE_ENV === 'development';
-const contentSecurityPolicy = [
+export const contentSecurityPolicy = [
   "default-src 'self'",
-  `script-src 'self' 'unsafe-inline'${isDevelopment ? " 'unsafe-eval'" : ''} https://assets.calendly.com https://va.vercel-scripts.com`,
+  `script-src 'self' 'unsafe-inline'${isDevelopment ? " 'unsafe-eval'" : ''} https://assets.calendly.com https://va.vercel-scripts.com https://static.cloudflareinsights.com`,
   "style-src 'self' 'unsafe-inline' https://assets.calendly.com",
   "img-src 'self' data: blob: https://assets.calendly.com https://*.calendly.com",
   "font-src 'self' data: https://assets.calendly.com",
-  "connect-src 'self' https://calendly.com https://*.calendly.com https://vitals.vercel-insights.com https://va.vercel-scripts.com",
+  "connect-src 'self' https://calendly.com https://*.calendly.com https://vitals.vercel-insights.com https://va.vercel-scripts.com https://cloudflareinsights.com",
   "frame-src https://calendly.com https://*.calendly.com",
   "object-src 'none'",
   "base-uri 'self'",
