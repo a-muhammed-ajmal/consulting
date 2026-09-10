@@ -250,7 +250,7 @@ export function FdiDiagnosticFlow() {
     /*
       SS3.3 entry page. The empty IndexScale is the aside: it renders with no
       reading, because a sample score on a marketing surface would be an
-      invented metric (DESIGN SS7). No marquee and no sticky bar here.
+      invented metric (DESIGN SS7). No marquee here.
     */
     const startButton = (
       <Button onClick={() => void start()} disabled={isWorking}>
@@ -376,7 +376,7 @@ export function FdiDiagnosticFlow() {
   const isLast = currentQuestion === CURRENT_FDI_QUESTION_SET.questions.length - 1;
   const selected = answers[question.id];
   const progress = Math.round(((currentQuestion + 1) / CURRENT_FDI_QUESTION_SET.questions.length) * 100);
-  /* No orbs, no marquee, no sticky bar, no spoke arc on the flow. This screen
+  /* No orbs, no marquee, no spoke arc on the flow. This screen
      is quiet on purpose (frontend.md §3.4). */
   return (
     <div className="relative flex min-h-svh items-center overflow-hidden bg-canvas-light px-4 py-5 sm:py-8">

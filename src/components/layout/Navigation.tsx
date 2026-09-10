@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
+import { BrandLockup } from "@/components/layout/BrandLogo";
 
 const navLinks = [
   { href: "/#founder-trap", label: "Founder Trap" },
@@ -46,15 +47,8 @@ export function Navigation() {
   return (
     <nav className={cn("sticky top-0 z-50 border-b border-line bg-white/80 px-4 py-3 text-ink backdrop-blur-md backdrop-saturate-150 transition-all duration-200 md:px-6", scrolled && "border-line-strong shadow-2")}>
       <div className="mx-auto flex max-w-7xl items-center justify-between">
-        <Link href="/" className="flex min-h-[44px] items-center gap-3 transition-opacity hover:opacity-90">
-          <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand shadow-1">
-            <span className="font-heading text-[length:var(--step-0)] font-extrabold leading-none tracking-tighter text-white">M<span className="text-accent">A</span></span>
-            <span className="absolute -right-1 -top-1 h-2.5 w-2.5 rounded-full bg-accent" aria-hidden="true" />
-          </div>
-          <div>
-            <p className="font-heading text-xs font-bold uppercase leading-none">Muhammed Ajmal</p>
-            <p className="mt-0.5 hidden font-body text-xs font-medium uppercase tracking-normal text-brand-ink sm:block">Business Operations &amp; Growth</p>
-          </div>
+        <Link href="/" className="flex min-h-[44px] items-center transition-opacity hover:opacity-90">
+          <BrandLockup className="h-10 sm:h-11" eager />
         </Link>
 
         <div className="hidden gap-6 font-body text-[length:var(--step-0)] font-medium tracking-wide lg:flex">

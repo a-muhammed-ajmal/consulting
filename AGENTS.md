@@ -16,11 +16,10 @@ A B2B consulting website and business diagnostic tool for Ajmal's consulting pra
 ## Tech Stack
 | Layer | Library / Version |
 |---|---|
-| Framework | Next.js **16.2.7** — App Router, React 19 |
+| Framework | Next.js **16.3.4** — App Router, React 19 |
 | Language | TypeScript 5 (strict) |
 | Styling | Tailwind CSS **v4** (`@import "tailwindcss"` — no `tailwind.config.js`) |
 | Database / Auth | Supabase (`@supabase/supabase-js`, `@supabase/ssr`) |
-| AI | Anthropic SDK `@anthropic-ai/sdk` |
 | Email | Resend + `@react-email/components` |
 | Forms | `react-hook-form` + `zod` |
 | Animations | Native CSS only — `animation-timeline` scroll-driven effects in `globals.css`. No animation library. |
@@ -47,7 +46,6 @@ src/
     insights/       # ArticleToc
   lib/
     supabase/       # server.ts (createAdminClient) — server-only, service-role
-    ai.ts           # Anthropic client
     email/templates/# React Email templates (DiagnosticReport, ContactNotification)
     fdi/            # ACTIVE instrument — config, questions, scoring, bands, findings
     scoring.ts      # RETIRED (ten-question diagnostic). Survives only for

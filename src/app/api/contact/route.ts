@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/server";
 import { ContactNotificationEmail } from "@/lib/email/templates/ContactNotification";
-import { inquiryTypeLabel } from "@/lib/contact/inquiry-types";
+import { inquiryTypeLabel, isInquiryTypeValue } from "@/lib/contact/inquiry-types";
 import { enforcePublicFormLimits } from "@/lib/rateLimit";
 import { Resend } from "resend";
 import { z } from "zod";
@@ -14,8 +14,8 @@ const schema = z.object({
   email: z.string().email(),
   phone: z.string().min(7).max(20),
   companyName: z.string().min(2).max(200),
-  inquiryType: z.string().min(1),
-  message: z.string().min(10).max(2000),
+  inquiryType: z.string().refine(isInquiryTypeValue),
+  message: z.string().min(20).max(2000),
 });
 
 type ContactData = z.infer<typeof schema>;
@@ -117,6 +117,9 @@ export async function POST(req: NextRequest) {
     // notification outcome. They are not asked to resubmit.
     return NextResponse.json({ success: true });
   } catch (error) {
+    if (error instanceof z.ZodError || error instanceof SyntaxError) {
+      return NextResponse.json({ success: false }, { status: 400 });
+    }
     console.error("Contact error:", error);
     return NextResponse.json({ success: false }, { status: 500 });
   }

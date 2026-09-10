@@ -125,13 +125,13 @@ describe('POST /api/contact', () => {
     expect(replyTo).toBe('dana@acme.ae');
   });
 
-  it('falls back to the stored value for an unrecognised inquiry type', async () => {
+  it('rejects an unrecognised inquiry type before storing or sending', async () => {
     supabaseWith({ data: { id: 'row-5' }, error: null });
 
-    await POST(request({ ...VALID, inquiryType: 'retired-slug' }));
+    const response = await POST(request({ ...VALID, inquiryType: 'retired-slug' }));
 
-    expect(mockSend.mock.calls[0][0].subject).toBe(
-      'New inquiry — Dana Okonkwo, Acme Trading — retired-slug',
-    );
+    expect(response.status).toBe(400);
+    expect(await response.json()).toEqual({ success: false });
+    expect(mockSend).not.toHaveBeenCalled();
   });
 });

@@ -274,7 +274,6 @@ re-deriving a section.
 | `<Carousel>` | Stepped 3-up, `translate3d`. Never auto-advances |
 | `<CTABand>` | The closing dark band. `.eyebrow` resolves to amber inside `.bg-canvas-dark` unaided |
 | `<TrustMarquee>` | Home and Diagnostic only |
-| `<StickyCTABar>` | Appears once the hero leaves the viewport, via IntersectionObserver on a sentinel — not a scroll listener. Dismissal is `sessionStorage`, so it returns next visit. Never rendered on the diagnostic flow or admin |
 | `<IndexScale>` / `<IndexBandList>` | `src/components/fdi/`. Reads bands from the active FDI config — never restates them. See §7 |
 
 ## 5. Layout and motion

@@ -19,19 +19,30 @@ function Orbs() {
 }
 
 export function FdiResults() {
-  const [report, setReport] = useState<FounderFdiReport | null>(null);
+  const [report, setReport] = useState<FounderFdiReport | null | undefined>(undefined);
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
       try {
         const stored = sessionStorage.getItem('fdiFounderReport');
-        if (stored) setReport(JSON.parse(stored) as FounderFdiReport);
+        setReport(stored ? JSON.parse(stored) as FounderFdiReport : null);
       } catch {
         setReport(null);
       }
     }, 0);
     return () => window.clearTimeout(timer);
   }, []);
+
+  if (report === undefined) {
+    return (
+      <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-canvas-light px-5">
+        <Orbs />
+        <p role="status" className="relative z-10 font-body text-[length:var(--step-0)] text-muted">
+          Loading your result…
+        </p>
+      </div>
+    );
+  }
 
   if (!report) {
     return (

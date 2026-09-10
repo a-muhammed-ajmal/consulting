@@ -37,7 +37,7 @@ on every CI run and fails on prohibited language.
 
 | Layer | Choice |
 | :---- | :---- |
-| Framework | Next.js 16.2.7 — App Router, React 19 |
+| Framework | Next.js 16.3.4 — App Router, React 19 |
 | Language | TypeScript 5, strict |
 | Styling | Tailwind CSS v4 — no config file; theme lives in `@theme {}` inside `globals.css` |
 | Database / Auth | Supabase (`@supabase/supabase-js`, `@supabase/ssr`) |
@@ -92,9 +92,9 @@ it rather than reading the CSS.
 
 | Metric | Count |
 | :---- | :---- |
-| Tests | 379 passing (32 suites), 61.96% statement coverage |
+| Tests | 417 passing (42 suites), 78.31% statement coverage |
 | DB tables | 8 |
-| Migrations | 6 |
+| Migrations | 7 |
 | Routes | 19 page routes, 9 API route handlers |
 
 ---

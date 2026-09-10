@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { ArrowRight } from "lucide-react";
 import { NewsletterForm } from "@/components/newsletter/NewsletterForm";
 import { Button } from "@/components/ui/Button";
+import { BrandLockup } from "@/components/layout/BrandLogo";
 
 const links = [
   { href: "/#founder-trap", label: "Founder Trap" },
@@ -45,16 +46,7 @@ export function Footer() {
 
         <div className="mt-12 grid gap-10 md:grid-cols-12">
           <div className="md:col-span-5">
-            <div className="flex items-center gap-3">
-              <span className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand shadow-1" aria-hidden="true">
-                <span className="font-heading text-[length:var(--step-0)] font-extrabold leading-none tracking-tighter text-white">
-                  M<span className="text-accent">A</span>
-                </span>
-              </span>
-              <p className="font-heading text-[length:var(--step-0)] font-bold uppercase">
-                Muhammed Ajmal Consulting
-              </p>
-            </div>
+            <BrandLockup className="w-full max-w-[240px]" sizes="240px" />
             {/* WEB §5 fixes this descriptor word for word, including the location
                 clause. It is one sentence, not a descriptor plus a city line. */}
             <p className="mt-4 max-w-xs font-body text-[length:var(--step-0)] leading-relaxed text-muted">

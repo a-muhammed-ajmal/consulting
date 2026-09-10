@@ -66,6 +66,14 @@ async function consumeSupabase(rule: RateLimitRule): Promise<RateLimitResult> {
 }
 
 /**
+ * Security-sensitive callers use the strict path so a failed counter store
+ * cannot silently remove their brute-force protection.
+ */
+export async function consumeStrict(rule: RateLimitRule): Promise<RateLimitResult> {
+  return consumeSupabase(rule);
+}
+
+/**
  * Consumes one unit from a bucket.
  *
  * Fails OPEN: if the counter store itself is unreachable the request is allowed through

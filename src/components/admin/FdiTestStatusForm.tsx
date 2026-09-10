@@ -1,6 +1,14 @@
 'use client';
 
 import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { Button } from '@/components/ui/Button';
+import { Input, Label } from '@/components/ui/Field';
+
+const testStatusSchema = z.object({ reason: z.string().max(500) });
+type TestStatusFields = z.infer<typeof testStatusSchema>;
 
 interface FdiTestStatusFormProps {
   readonly sessionId: string;
@@ -9,13 +17,13 @@ interface FdiTestStatusFormProps {
 
 export function FdiTestStatusForm({ sessionId, isTest }: FdiTestStatusFormProps) {
   const [currentValue, setCurrentValue] = useState(isTest);
-  const [reason, setReason] = useState('');
   const [message, setMessage] = useState<string | null>(null);
-  const [working, setWorking] = useState(false);
+  const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<TestStatusFields>({
+    resolver: zodResolver(testStatusSchema),
+    defaultValues: { reason: '' },
+  });
 
-  const submit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setWorking(true);
+  const submit = async ({ reason }: TestStatusFields) => {
     setMessage(null);
     try {
       const response = await fetch(`/api/admin/fdi/sessions/${sessionId}/test-status`, {
@@ -28,27 +36,26 @@ export function FdiTestStatusForm({ sessionId, isTest }: FdiTestStatusFormProps)
         throw new Error(payload && typeof payload === 'object' && 'error' in payload && typeof payload.error === 'string' ? payload.error : 'Unable to update test status.');
       }
       setCurrentValue((value) => !value);
-      setReason('');
+      reset();
       setMessage('Test status updated and recorded in the audit history.');
     } catch (cause) {
       setMessage(cause instanceof Error ? cause.message : 'Unable to update test status.');
-    } finally {
-      setWorking(false);
     }
   };
 
   return (
-    <form onSubmit={submit} className="space-y-3">
+    <form onSubmit={handleSubmit(submit)} className="space-y-3">
       <p className="font-body text-[length:var(--step-0)] text-muted">
         Current classification: <strong>{currentValue ? 'Test' : 'Live'}</strong>
       </p>
-      <label className="block">
-        <span className="font-heading text-[length:var(--step-0)] font-semibold text-ink">Reason <span className="font-normal text-muted">(optional)</span></span>
-        <input value={reason} onChange={(event) => setReason(event.target.value)} maxLength={500} className="mt-1 w-full min-h-[44px] rounded-lg border border-line px-3 py-2 text-ink focus:outline-none focus:ring-2 focus:ring-brand" />
-      </label>
-      <button type="submit" disabled={working} className="min-h-[44px] rounded-lg bg-brand text-white px-4 py-2 font-heading text-[length:var(--step-0)] font-bold hover:bg-brand-hover disabled:opacity-50">
-        {working ? 'Saving…' : currentValue ? 'Mark as live' : 'Mark as test'}
-      </button>
+      <div>
+        <Label htmlFor="test-status-reason">Reason <span className="font-normal text-muted">(optional)</span></Label>
+        <Input id="test-status-reason" {...register('reason')} invalid={Boolean(errors.reason)} maxLength={500} />
+        {errors.reason && <p role="alert" className="mt-1 font-body text-xs text-danger">Reason must be 500 characters or fewer.</p>}
+      </div>
+      <Button type="submit" disabled={isSubmitting}>
+        {isSubmitting ? 'Saving…' : currentValue ? 'Mark as live' : 'Mark as test'}
+      </Button>
       {message && <p role="status" className="font-body text-xs text-muted">{message}</p>}
     </form>
   );

@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { ArrowRight, Check } from "lucide-react";
+import { ArrowRight, Check, ExternalLink } from "lucide-react";
 import { Accordion } from "@/components/ui/Accordion";
 import { Button } from "@/components/ui/Button";
 import { CTABand } from "@/components/ui/CTABand";
@@ -162,6 +162,15 @@ export default function AboutPage() {
             <h2 className="heading-reveal font-heading text-[length:var(--step-4)] font-extrabold text-ink">
               Current learning and professional development
             </h2>
+            <a
+              href="https://www.linkedin.com/in/muhammed-ajmal-consultant/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 inline-flex min-h-11 items-center gap-2 font-body text-[length:var(--step-0)] font-medium text-brand-ink underline transition-colors hover:text-brand"
+            >
+              View credential record
+              <ExternalLink className="h-4 w-4" aria-hidden="true" />
+            </a>
           </div>
           <ul className="grid gap-3 lg:col-span-7">
             {credentials.map((credential) => (

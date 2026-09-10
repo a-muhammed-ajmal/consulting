@@ -1,4 +1,6 @@
 import { ImageResponse } from 'next/og';
+import { readFile } from 'node:fs/promises';
+import { join } from 'node:path';
 
 // Site-default Open Graph image. A per-article override lives alongside the article.
 // Literal hex is unavoidable here: ImageResponse is rendered by Satori, which cannot read
@@ -10,7 +12,12 @@ export const alt = 'Muhammed Ajmal · Business Operations & Growth Consultant';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
-export default function OpengraphImage() {
+export default async function OpengraphImage() {
+  const logoData = await readFile(
+    join(process.cwd(), 'public', 'logos', 'muhammedajmalcom-lockup-640.png'),
+    'base64',
+  );
+
   return new ImageResponse(
     (
       <div
@@ -25,55 +32,18 @@ export default function OpengraphImage() {
           fontFamily: 'sans-serif',
         }}
       >
-        {/* Logomark — mirrors src/app/icon.tsx */}
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          <div
+          {/* ImageResponse requires a native image element; next/image is not supported by Satori. */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={`data:image/png;base64,${logoData}`}
+            alt=""
+            width={398}
+            height={134}
             style={{
-              position: 'relative',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: 84,
-              height: 84,
-              background: '#0066FF',
-              borderRadius: 16,
+              objectFit: 'contain',
             }}
-          >
-            <div
-              style={{
-                display: 'flex',
-                fontSize: 44,
-                fontWeight: 900,
-                letterSpacing: '-2px',
-              }}
-            >
-              <span style={{ color: '#FFFFFF' }}>M</span>
-              <span style={{ color: '#FFCC00' }}>A</span>
-            </div>
-            <div
-              style={{
-                position: 'absolute',
-                top: 8,
-                right: 8,
-                width: 16,
-                height: 16,
-                borderTop: '4px solid #FFCC00',
-                borderRight: '4px solid #FFCC00',
-              }}
-            />
-          </div>
-          <span
-            style={{
-              marginLeft: 28,
-              color: '#000033',
-              fontSize: 26,
-              fontWeight: 700,
-              letterSpacing: '4px',
-              textTransform: 'uppercase',
-            }}
-          >
-            Muhammed Ajmal
-          </span>
+          />
         </div>
 
         {/* Title */}

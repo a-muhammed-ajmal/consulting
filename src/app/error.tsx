@@ -1,6 +1,5 @@
 "use client";
 
-import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { PageHero } from "@/components/ui/PageHero";
 
@@ -25,13 +24,6 @@ export default function GlobalError({ reset }: { error: Error & { digest?: strin
           <Button onClick={reset}>Try again</Button>
           <Button href="/" variant="quiet">
             Back to home
-          </Button>
-          <Button href="/diagnostic" variant="quiet">
-            Start the Business Health Check
-            {/* WEB §5 fixes the label including the arrow. The icon is decorative,
-                so the glyph is restated here for the accessible name only. */}
-            <span className="sr-only"> →</span>
-            <ArrowRight className="h-4 w-4" aria-hidden="true" />
           </Button>
         </>
       }

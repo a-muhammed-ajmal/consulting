@@ -22,7 +22,6 @@ export function proxy(req: NextRequest) {
       [
         req.nextUrl.host,
         req.headers.get('host'),
-        req.headers.get('x-forwarded-host'),
         getHost(process.env.NEXT_PUBLIC_SITE_URL ?? null),
         getHost(process.env.VERCEL_URL ?? null),
         getHost(process.env.VERCEL_PROJECT_PRODUCTION_URL ?? null),

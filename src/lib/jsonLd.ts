@@ -25,6 +25,7 @@ export function personAndServiceJsonLd() {
         url: `${SITE_URL}/about`,
         image: AUTHOR_HEADSHOT_URL,
         knowsLanguage: ["English", "Arabic", "Hindi", "Malayalam", "Tamil", "Kannada"],
+        sameAs: ["https://www.linkedin.com/in/muhammed-ajmal-consultant/"],
         worksFor: { "@id": `${SITE_URL}#service` },
       },
       {
@@ -32,6 +33,7 @@ export function personAndServiceJsonLd() {
         "@id": `${SITE_URL}#service`,
         name: SITE_NAME,
         url: SITE_URL,
+        logo: `${SITE_URL}/logos/muhammedajmalcom-mark-512.png`,
         description:
           "Business operations and growth consultancy for founder-led UAE SMEs, applying systems thinking, execution, and applied AI to reduce founder dependency.",
         areaServed: ["United Arab Emirates"],
@@ -108,9 +110,11 @@ export function articleJsonLd(article: Article) {
       image: AUTHOR_HEADSHOT_URL,
     },
     publisher: {
-      "@type": "Organization",
+      "@type": "ProfessionalService",
+      "@id": `${SITE_URL}#service`,
       name: SITE_NAME,
       url: SITE_URL,
+      logo: `${SITE_URL}/logos/muhammedajmalcom-mark-512.png`,
     },
     mainEntityOfPage: url,
     articleSection: article.category,

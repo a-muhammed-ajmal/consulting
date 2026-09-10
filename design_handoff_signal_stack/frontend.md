@@ -121,7 +121,7 @@ Container width comes from `<Section width>`: `prose` 768px · `narrow` 1024px �
 | --- | --- | --- |
 | `--shadow-1` | `0 1px 2px rgba(0,0,51,.06)` | Resting card, input |
 | `--shadow-2` | `0 4px 12px rgba(0,0,51,.08), 0 2px 4px rgba(0,0,51,.04)` | Card hover, glass panel |
-| `--shadow-3` | `0 10px 28px rgba(0,0,51,.12), 0 4px 8px rgba(0,0,51,.06)` | Floating panel, sticky bar |
+| `--shadow-3` | `0 10px 28px rgba(0,0,51,.12), 0 4px 8px rgba(0,0,51,.06)` | Floating panel |
 | `--shadow-glow-electric` | `0 8px 24px rgba(0,102,255,.22), 0 2px 6px rgba(0,102,255,.12)` | Primary CTA hover |
 | `--shadow-glow-amber` | `0 8px 24px rgba(255,204,0,.28), 0 2px 6px rgba(212,158,0,.16)` | Secondary CTA hover |
 
@@ -321,16 +321,13 @@ Progress persistence and session handling already exist in `src/lib/fdi/` and `s
 **`IndexScale`** — the Founder Dependency Index readout. Band names, thresholds and wording come from
 **PRODUCT** and the canonical FDI routes — do not invent or restate them here. Presentation: a 10px
 track with quartile ticks and `0 / 50 / 100` labels at `--step--1` in `--color-muted`.
-**Renders empty everywhere except a completed result page**, with the caption
-"empty scale — awaiting your answers". No sample reading, ever.
+Renders empty only on the Business Health Check entry state and renders a real
+value only on a completed result page. It never appears on the Home page and
+never displays a sample reading.
 
 **`CTABand`** — `bg-canvas-dark`, 2 Orbs, `--space-9` block padding, 7/5 split:
 `.eyebrow` (auto-amber on dark) + H2 (white, `24ch`) + body (`--color-muted-invert`) + primary Button
 on the left, `GlassPanel` on the right. Closes every route.
-
-**`StickyCTABar`** — **[DESIGN CHANGE]**, not in DESIGN today. Appears once the hero leaves the
-viewport, `--shadow-3`, white, one line of copy + meta + a 44px primary Button. Dismissible,
-dismissal remembered for the session. Suppressed on the Diagnostic flow and Admin.
 
 **`Footer`** — `--color-canvas-light`, `1px --color-line` top, 2fr + 3×1fr columns, hairline legal row.
 
@@ -347,16 +344,16 @@ Order is fixed. Each route is a stack of the composites above — no bespoke sec
 > omitted `/insights/category/[slug]` and `/unsubscribe`, and added a 404 route WEB does not carry.
 > Corrected below. §3.4 "Diagnostic flow" is a **state of `/diagnostic`**, not a route of its own —
 > `/diagnostic/fdi` and `/results/fdi` are 308 noindex aliases (WEB §4), not pages to design.
-> A 404 cannot be registered by this file. Until WEB is amended, it is not built.
+> The registered noindex 404 and error fallbacks are supporting surfaces, not
+> public marketing routes.
 
 ### 3.1 Home — `src/app/page.tsx`, `src/components/home/`
-`PageHero` (signal row = the three operating areas) → `TrustMarquee` (pattern chips) →
-**The Founder Trap** `CardGrid` 4-up → `StageRail` on `--color-brand-tint` → operating-scope **4**-up
-tile grid (Strategy, Systems, People, Applied AI) — **ANCHOR §6 has exactly four areas. "Data" and
-"Accountability" are not among them; Accountability is a step in the Growth Formula, ANCHOR §10.3.
-ANCHOR is locked, so the earlier 6-up in this line was wrong.** →
-dark proof band with `GlassPanel` (empty `IndexScale`) → `Accordion` → `CTABand` → `Footer`.
-`StickyCTABar` after the hero.
+`PageHero` (signal row = the three operating areas; operating-architecture aside) →
+`TrustMarquee` (pattern chips) → Growth Formula rail → **The Founder Trap** `CardGrid` 4-up →
+Business Health Check preview without a score meter → five-stage `StageRail` → operating-scope
+list (Strategy, Systems, People, Applied AI) → Strategic Growth Architecture → dark measurement
+band → target profile → `Accordion` → `CTABand` → `Footer`. ANCHOR §6 has exactly four areas;
+"Data" and "Accountability" are not additional operating-scope areas.
 
 ### 3.2 Services / How It Works
 Route per **WEB**. `PageHero` (no signal row) → `SectionNav` + vertical `StageRail`: each of the five
@@ -371,7 +368,7 @@ length, cost, privacy and email behaviour is PRODUCT's — pull it, don't paraph
 
 ### 3.4 Diagnostic flow — `src/app/diagnostic/`, `src/components/fdi/`
 Chrome stripped to logo + progress + exit. `QuestionStepper` only, one question per screen,
-auto-advance. Exit confirms before discarding. No marquee, no sticky bar, no orbs, no SpokeArc —
+auto-advance. Exit confirms before discarding. No marquee, no fixed CTA, no orbs, no SpokeArc —
 this screen is quiet on purpose. Question content and scoring are PRODUCT's, in
 `src/lib/fdi/` (FDI-1.1) with session handling in `src/lib/fdi-server/` — **not** the retired
 `src/lib/questions.ts` / `src/lib/scoring.ts`.
@@ -413,12 +410,10 @@ date above the body. **Not `.article-longform`** — that class carries the 16px
 and its `li` selector matches any descendant, so applying it here would extend the exception to a
 second route. DESIGN §1 closes it to `/insights/[slug]` alone. No orbs, no SpokeArc, no marquee, one dark `CTABand` at most.
 
-### 3.11 404 / error — **NOT IN WEB'S REGISTER. DO NOT BUILD YET.**
-There is no `not-found.tsx` or `error.tsx` in the repo today, and WEB §4 does not register a 404.
-This file cannot add a route. A WEB §4 amendment must be approved first; once WEB carries it, build
-it in its own commit as: `PageHero` `tone="tint"` with SpokeArc retained, H1 "This page isn't here",
-one line of body, two buttons (Home, Diagnostic), and a 3-up `CardGrid` of likely destinations.
-No sticky bar. Error boundary uses the same shell with a retry Button.
+### 3.11 404 / error fallbacks
+WEB registers both as noindex fallbacks. `not-found.tsx` uses the standard `PageHero` shell with
+Home and Business Health Check routes. `error.tsx` uses the standard shell with retry and Home
+controls. Neither captures data, presents an offer, or renders a fixed CTA.
 
 ### 3.11a Category index — `/insights/category/[slug]`
 In WEB §4, missing from the earlier draft. Same shell as §3.6, scoped to one category: `PageHero`
@@ -452,7 +447,7 @@ result page. Auth via `src/lib/adminAuth.ts`.
 Breakpoints are Tailwind's plus the two the CSS already keys on: **768px** (type scale, stage rail)
 and **1024px** (sticky TOC). Grids collapse 4→2→1, 3→1, 5→vertical rail.
 Hero drops the signal row to a 1-up stack below 640px and reduces SpokeArc opacity to `.35`.
-`SectionNav` becomes a `Chip` row below 1024px. `StickyCTABar` becomes a two-line stack.
+`SectionNav` becomes a `Chip` row below 1024px.
 Section padding floors at `--space-8` / `--space-4`.
 **The 24px heading / 14px body mobile ceilings in §1.2 are enforced by the step tokens** — they hold
 automatically as long as no px font-size is hardcoded.
@@ -498,9 +493,8 @@ Everything in this document is either **already in DESIGN** (implement directly)
 | 3 | CTA shine sweep | `globals.css` keyframes + Button variant |
 | 4 | `TrustMarquee` | New component + keyframes |
 | 5 | `.card-interactive-raised` — 6px lift, deep shadow, spring tile | New shadow + ease token |
-| 6 | `StickyCTABar` | New component |
-| 7 | Horizontal scroll-snap `StageRail` variant | Presentation variant, Home only |
-| 8 | Tint-surface border token (if `#CCE0FF` is genuinely needed) | New `@theme` key |
+| 6 | Horizontal scroll-snap `StageRail` variant | Presentation variant, Home only |
+| 7 | Tint-surface border token (if `#CCE0FF` is genuinely needed) | New `@theme` key |
 
-Items 1–4 and 6 are additive and low-risk. Item 5 touches the house interaction — land it last,
+Items 1–4 are additive and low-risk. Item 5 touches the house interaction — land it last,
 behind an opt-in class, or drop it. Nothing in §1 requires a change.

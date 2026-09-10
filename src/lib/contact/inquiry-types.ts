@@ -23,9 +23,14 @@ export const INQUIRY_TYPES: readonly InquiryType[] = [
   { value: 'other', label: 'Something else' },
 ];
 
+export function isInquiryTypeValue(value: string): boolean {
+  return INQUIRY_TYPES.some((type) => type.value === value);
+}
+
 /**
- * Historic rows carry slugs from the retired six-service list, and the server
- * schema accepts any non-empty string, so an unknown value is always possible.
+ * Historic rows may carry slugs from the retired six-service list. New public
+ * submissions are restricted to the active values above, but an unknown value
+ * can still appear when an historic row is rendered.
  * It falls back to the raw stored value rather than throwing or showing blank —
  * a subject line reading the slug is still better than one reading "undefined".
  */

@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { requireAdminAuth } from '@/lib/adminAuth';
 import { createAdminClient } from '@/lib/supabase/server';
+import { BrandMark } from '@/components/layout/BrandLogo';
+import { AdminSignOut } from '@/components/admin/AdminSignOut';
 
 type FdiSessionListRow = {
   readonly id: string;
@@ -19,10 +21,14 @@ type FdiSessionListRow = {
 export default async function AdminFdiPage() {
   await requireAdminAuth();
   const supabase = createAdminClient();
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from('fdi_sessions')
     .select('id,created_at,status,is_test,name,email,company_name,fdi_display,band_label,qualification_result,email_sent')
     .order('created_at', { ascending: false });
+  if (error) {
+    console.error('FDI sessions could not be loaded:', error);
+    throw new Error('FDI sessions could not be loaded.');
+  }
   const sessions = (data ?? []) as FdiSessionListRow[];
   const liveCompleted = sessions.filter((session) => !session.is_test && session.status === 'completed');
   const liveInProgress = sessions.filter((session) => !session.is_test && session.status === 'in_progress');
@@ -31,8 +37,8 @@ export default async function AdminFdiPage() {
   return (
     <div className="min-h-screen bg-canvas-light">
       <nav className="border-b border-line bg-white text-ink px-6 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-4"><Link href="/admin/leads" className="text-xs text-muted hover:text-brand-ink">← Legacy leads</Link><span className="font-heading font-bold text-[length:var(--step-0)]">M<span className="text-brand-ink">A</span> · FDI Consultant Workspace</span></div>
-        <div className="flex items-center gap-4"><Link href="/diagnostic?testMode=true" className="text-xs text-brand-ink hover:text-brand">Start Test Mode</Link><a href="/api/admin/logout" className="text-xs text-muted hover:text-brand-ink">Sign Out</a></div>
+        <div className="flex items-center gap-4"><Link href="/admin/leads" className="text-xs text-muted hover:text-brand-ink">← Legacy leads</Link><span className="flex items-center gap-2 font-heading font-bold text-[length:var(--step-0)]"><BrandMark className="h-7 w-7" />FDI Consultant Workspace</span></div>
+        <div className="flex items-center gap-4"><Link href="/diagnostic?testMode=true" className="text-xs text-brand-ink hover:text-brand">Start Test Mode</Link><AdminSignOut /></div>
       </nav>
       <section className="max-w-7xl mx-auto px-4 py-8">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4"><div><p className="eyebrow text-brand-ink">Founder Dependency Index</p><h1 className="font-heading font-extrabold text-ink text-[length:var(--step-3)] mt-2">FDI sessions</h1><p className="font-body text-[length:var(--step-0)] text-muted mt-2">Live and test records are separated. Qualification is consultant-only.</p></div></div>

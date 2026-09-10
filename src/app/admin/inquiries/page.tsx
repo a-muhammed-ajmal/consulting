@@ -2,6 +2,8 @@ import Link from 'next/link';
 import { requireAdminAuth } from '@/lib/adminAuth';
 import { createAdminClient } from '@/lib/supabase/server';
 import { inquiryTypeLabel } from '@/lib/contact/inquiry-types';
+import { BrandMark } from '@/components/layout/BrandLogo';
+import { AdminSignOut } from '@/components/admin/AdminSignOut';
 
 /**
  * Consultant-only view of contact inquiries.
@@ -31,10 +33,14 @@ type ContactInquiryRow = {
 export default async function AdminInquiriesPage() {
   await requireAdminAuth();
   const supabase = createAdminClient();
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from('contact_enquiries')
     .select('id,created_at,name,email,phone,company_name,inquiry_type,message,email_sent,email_error')
     .order('created_at', { ascending: false });
+  if (error) {
+    console.error('Contact inquiries could not be loaded:', error);
+    throw new Error('Contact inquiries could not be loaded.');
+  }
 
   const inquiries = (data ?? []) as ContactInquiryRow[];
   // A recorded rejection outranks recency: those are the messages at risk of
@@ -49,9 +55,9 @@ export default async function AdminInquiriesPage() {
       <nav className="border-b border-line bg-white text-ink px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Link href="/admin/fdi" className="text-xs text-muted hover:text-brand-ink">← FDI sessions</Link>
-          <span className="font-heading font-bold text-[length:var(--step-0)]">M<span className="text-brand-ink">A</span> · Contact inquiries</span>
+          <span className="flex items-center gap-2 font-heading font-bold text-[length:var(--step-0)]"><BrandMark className="h-7 w-7" />Contact inquiries</span>
         </div>
-        <a href="/api/admin/logout" className="text-xs text-muted hover:text-brand-ink">Sign Out</a>
+        <AdminSignOut />
       </nav>
 
       <section className="max-w-7xl mx-auto px-4 py-8">

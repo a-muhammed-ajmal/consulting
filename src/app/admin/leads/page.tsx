@@ -3,14 +3,20 @@ import { createAdminClient } from "@/lib/supabase/server";
 import Link from "next/link";
 import type { Lead } from "@/types";
 import { cn } from "@/lib/utils";
+import { BrandMark } from "@/components/layout/BrandLogo";
+import { AdminSignOut } from '@/components/admin/AdminSignOut';
 
 export default async function AdminLeadsPage() {
   await requireAdminAuth();
   const supabase = createAdminClient();
-  const { data: leads } = await supabase
+  const { data: leads, error } = await supabase
     .from("diagnostic_leads")
     .select("*")
     .order("created_at", { ascending: false });
+  if (error) {
+    console.error('Legacy leads could not be loaded:', error);
+    throw new Error('Legacy leads could not be loaded.');
+  }
 
   const severityColors: Record<string, string> = {
     Critical: "bg-danger-soft text-danger",
@@ -21,8 +27,9 @@ export default async function AdminLeadsPage() {
   return (
     <div className="min-h-screen bg-canvas-light">
       <nav className="border-b border-line bg-white text-ink px-6 py-4 flex justify-between items-center">
-        <div className="font-heading font-bold text-[length:var(--step-0)]">
-          M<span className="text-brand-ink">A</span> · Consultant Workspace
+        <div className="flex items-center gap-2 font-heading font-bold text-[length:var(--step-0)]">
+          <BrandMark className="h-7 w-7" />
+          <span>Consultant Workspace</span>
         </div>
         <div className="flex items-center gap-4">
           <Link
@@ -34,12 +41,7 @@ export default async function AdminLeadsPage() {
           <span className="font-body text-xs text-muted">
             {leads?.length || 0} leads
           </span>
-          <a
-            href="/api/admin/logout"
-            className="text-xs text-muted hover:text-brand-ink transition-colors"
-          >
-            Sign Out
-          </a>
+          <AdminSignOut />
         </div>
       </nav>
 
@@ -75,7 +77,7 @@ export default async function AdminLeadsPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-line">
-                {(leads as Lead[] | null)?.map((lead) => (
+                {(leads as Lead[]).map((lead) => (
                   <tr
                     key={lead.id}
                     className="hover:bg-brand-tint transition-colors"
@@ -154,6 +156,9 @@ export default async function AdminLeadsPage() {
               </tbody>
             </table>
           </div>
+          {leads.length === 0 && (
+            <p className="p-8 text-center font-body text-[length:var(--step-0)] text-muted">No legacy leads yet.</p>
+          )}
         </div>
       </div>
     </div>

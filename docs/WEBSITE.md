@@ -130,6 +130,10 @@ the deliberate exception: once a founder is already viewing a completed
 result, the navigation CTA is hidden on both desktop and mobile so the
 result handoff is not interrupted.
 
+The site renders no fixed or sticky CTA bar at any viewport width. Calls
+to action stay inside the normal document flow on desktop, tablet, and
+mobile.
+
 The footer repeats the core navigation, Privacy, the Business Health
 Check CTA, and this descriptor: *Business Operations & Growth Consulting
 for founder-led UAE SMEs, based in Dubai, United Arab Emirates.*
@@ -241,6 +245,11 @@ and its self-report boundary. The target-profile revenue line uses the
 full wording **AED 1,000,000 to AED 10,000,000**; abbreviations such as
 AED 1M–10M are not used.
 
+Primary sector language names trading and distribution, real estate and
+property services, and specialty contracting and technical services.
+These acquisition sectors do not replace or redefine the separate
+qualification taxonomy governed by PRODUCT.
+
 Do not render score-like graphics, fabricated readings, unsupported band
 names, or a home-page index meter. The previous empty 0–50–100 scale and
 its "awaiting your answers" caption are not permitted.
@@ -342,6 +351,17 @@ diagnostic use, processors, cross-border processing, retention, contact
 channel, and rights. Review it whenever processors, retention, consent,
 or data practices change.
 
+The implemented application-retention schedule is: incomplete FDI attempts,
+30 days; completed FDI sessions, contact inquiries, and historic diagnostic
+leads, 24 months from submission; unsubscribed newsletter rows, 30 days;
+expired admin sessions, immediately eligible for deletion; rate-limit rows,
+two days. Supabase, Resend, Vercel, Cloudflare, and Calendly are disclosed as
+service providers according to their actual roles in the deployed flow.
+
+The policy names Federal Decree-Law No. 45 of 2021. It does not cite an
+executive regulation unless that instrument has been verified from an
+authoritative UAE source.
+
 The unsubscribe route is factual, handles valid, invalid, and error
 states, and is noindex. A valid unsubscribe sets the subscriber's
 `unsubscribed_at` state. Invalid tokens resolve to the invalid state rather
@@ -366,6 +386,12 @@ Password- and cookie-protected internal tools provide access to current
 Founder Dependency Index sessions, stored inquiries, and historic lead
 records. They are not public marketing pages, are noindex, do not appear in
 the sitemap, and are not linked from public navigation.
+
+The browser holds the random admin bearer token only in a secure,
+HTTP-only, same-site cookie. The database stores its SHA-256 digest, and
+sign-out revokes that digest before clearing the cookie. Login rate limiting
+fails closed if its database guard is unavailable. Failed admin data queries
+render an explicit error state and are never presented as an empty pipeline.
 
 The protected inquiries surface shows stored contact inquiries and their
 notification-delivery state. Failed notifications are surfaced before
@@ -411,6 +437,15 @@ motion, and Lucide icons.
 
 Prefer server components. Keep client boundaries small. Public browser
 code never receives Supabase service-role credentials.
+
+Every route receives the configured Content Security Policy, clickjacking,
+MIME-sniffing, referrer, permissions, DNS-prefetch, and transport-security
+headers. The policy permits only the origins required by the site and its
+configured Calendly and Vercel Analytics integrations.
+
+FDI session tokens are signed with `FDI_SESSION_SIGNING_SECRET` when it is
+configured. The existing service-role-key fallback preserves issued-token
+compatibility while deployments adopt the dedicated secret.
 
 The production Calendly destination is provided through
 `NEXT_PUBLIC_CALENDLY_LINK`. Because `NEXT_PUBLIC_` values are embedded in
@@ -481,6 +516,8 @@ Run before every release.
   The primary navigation CTA is absent on `/results` on both desktop and
   mobile.
 
+  No fixed or sticky CTA bar appears on any route or viewport.
+
   `/admin` and protected admin subroutes remain authenticated, noindex,
   absent from the sitemap, and absent from public navigation.
 
@@ -504,10 +541,12 @@ Run before every release.
 
 ## 12. Current implementation status
 
-As of August 29, 2026, the public website release, contact flow, newsletter
-subscription flow, Operating Conversation booking, protected inquiry
-administration, redirects, responsive checks, and Business Health Check
-regression check have been implemented and verified in production.
+As of September 10, 2026, the release includes the public website, contact
+and newsletter flows, Operating Conversation booking, protected
+administration, canonical redirects, deterministic Business Health Check,
+site-wide security headers, hashed and revocable admin sessions, and an
+application-data retention job. Production status remains subject to the
+publishing checks above and application of every committed migration.
 
 Completed website work is not reopened as planning work unless a new
 verified defect, approved owner change, processor/data-practice change, or

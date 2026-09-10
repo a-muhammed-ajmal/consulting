@@ -10,8 +10,8 @@
  * compilation starts, so the build aborts there first regardless of which pages happen
  * to import this module.
  *
- * Server-only secrets (SUPABASE_SERVICE_ROLE_KEY, RESEND_API_KEY, ANTHROPIC_API_KEY,
- * ADMIN_PASSWORD) are deliberately NOT validated here — they are read lazily inside
+ * Server-only secrets (SUPABASE_SERVICE_ROLE_KEY, FDI_SESSION_SIGNING_SECRET,
+ * RESEND_API_KEY, ADMIN_PASSWORD) are deliberately NOT validated here — they are read lazily inside
  * route handlers so the build never requires them.
  */
 

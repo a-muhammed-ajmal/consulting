@@ -9,7 +9,6 @@ import { IconTile } from "@/components/ui/IconTile";
 import { PageHero } from "@/components/ui/PageHero";
 import { Section } from "@/components/ui/Section";
 import { StageRail } from "@/components/ui/StageRail";
-import { StickyCTABar } from "@/components/ui/StickyCTABar";
 import { Surface, SectionHeader } from "@/components/ui/Surface";
 import { TrustMarquee } from "@/components/ui/TrustMarquee";
 import { pageMetadata } from "@/lib/metadata";
@@ -253,7 +252,7 @@ export default function HomePage() {
               Founder-led UAE SMEs ready to make operating changes.
             </h2>
             <p className="mt-4 font-body text-[length:var(--step-0)] leading-relaxed text-muted">
-              Primary sectors include real estate and business services, trading and distribution, and construction and contracting.
+              Primary sectors include trading and distribution, real estate and property services, and specialty contracting and technical services.
             </p>
           </div>
           <ul className="grid gap-3 rounded-2xl border border-line bg-white p-6 shadow-1 sm:grid-cols-2 lg:col-span-7">
@@ -290,11 +289,6 @@ export default function HomePage() {
         }
       />
 
-      <StickyCTABar
-        label="Find out where your business still depends on you."
-        href="/diagnostic"
-        meta="Free · Private · 12 questions"
-      />
     </>
   );
 }

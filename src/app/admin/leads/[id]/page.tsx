@@ -6,6 +6,8 @@ import type { Lead } from "@/types";
 import { DIMENSION_META } from "@/lib/scoring";
 import type { DimensionKey } from "@/types";
 import { cn } from "@/lib/utils";
+import { BrandMark } from "@/components/layout/BrandLogo";
+import { AdminSignOut } from '@/components/admin/AdminSignOut';
 
 function toTitleCase(snake: string) {
   return snake.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
@@ -34,7 +36,12 @@ export default async function LeadBriefingPage({
     .eq("id", id)
     .single();
 
-  if (error || !lead) notFound();
+  if (error) {
+    if (error.code === 'PGRST116') notFound();
+    console.error(`Legacy lead ${id} could not be loaded:`, error);
+    throw new Error('Legacy lead could not be loaded.');
+  }
+  if (!lead) notFound();
 
   const typedLead = lead as Lead;
 
@@ -92,16 +99,20 @@ export default async function LeadBriefingPage({
           >
             ← All Leads
           </Link>
-          <div className="font-heading font-bold text-[length:var(--step-0)]">
-            M<span className="text-brand-ink">A</span> · Pre-Call Briefing
+          <div className="flex items-center gap-2 font-heading font-bold text-[length:var(--step-0)]">
+            <BrandMark className="h-7 w-7" />
+            <span>Pre-Call Briefing</span>
           </div>
         </div>
-        <a
-          href="/api/admin/logout"
-          className="text-xs text-muted hover:text-brand-ink transition-colors"
-        >
-          Sign Out
-        </a>
+        <div className="flex items-center gap-4">
+          <Link
+            href="/admin/fdi"
+            className="text-xs text-brand-ink hover:text-brand transition-colors"
+          >
+            FDI sessions
+          </Link>
+          <AdminSignOut />
+        </div>
       </nav>
 
       <div className="max-w-5xl mx-auto px-4 py-8 space-y-6">

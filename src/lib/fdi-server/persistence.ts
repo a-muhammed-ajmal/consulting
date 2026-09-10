@@ -247,27 +247,12 @@ export async function setFdiTestStatus(
   reason?: string,
 ): Promise<void> {
   const supabase = createAdminClient();
-  const { data, error } = await supabase
-    .from('fdi_sessions')
-    .select('is_test')
-    .eq('id', sessionId)
-    .single();
-  if (error || !data) throw new FdiInputError('FDI session was not found.');
-  if (Boolean(data.is_test) === isTest) return;
-
-  const { error: updateError } = await supabase
-    .from('fdi_sessions')
-    .update({ is_test: isTest })
-    .eq('id', sessionId);
-  if (updateError) throw updateError;
-  const { error: historyError } = await supabase
-    .from('fdi_test_status_history')
-    .insert({
-      session_id: sessionId,
-      previous_is_test: Boolean(data.is_test),
-      new_is_test: isTest,
-      admin_identifier: adminIdentifier,
-      reason: reason ?? null,
-    });
-  if (historyError) throw historyError;
+  const { error } = await supabase.rpc('set_fdi_test_status', {
+    p_session_id: sessionId,
+    p_is_test: isTest,
+    p_admin_identifier: adminIdentifier,
+    p_reason: reason ?? null,
+  });
+  if (error?.code === 'P0002') throw new FdiInputError('FDI session was not found.');
+  if (error) throw error;
 }

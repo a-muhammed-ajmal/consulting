@@ -11,9 +11,9 @@ Review `git diff HEAD` (or staged changes) across these dimensions. Output a str
 
 ### 1. Security
 
-- Is `SUPABASE_SERVICE_ROLE_KEY`, `ANTHROPIC_API_KEY`, `RESEND_API_KEY`, or `ADMIN_PASSWORD` referenced in a Client Component (`"use client"`) or otherwise reachable from the browser?
+- Is `SUPABASE_SERVICE_ROLE_KEY`, `FDI_SESSION_SIGNING_SECRET`, `RESEND_API_KEY`, or `ADMIN_PASSWORD` referenced in a Client Component (`"use client"`) or otherwise reachable from the browser?
 - Is `createAdminClient()` (bypasses RLS) used only in Route Handlers and Server Components — never imported into a Client Component?
-- Is user input validated at API route boundaries (`src/app/api/**/route.ts`) with a `zod` schema before it touches Supabase, the Anthropic SDK, or Resend?
+- Is user input validated at API route boundaries (`src/app/api/**/route.ts`) with a `zod` schema before it touches Supabase or Resend?
 - Are the public API routes (`/api/submit`, `/api/contact`, `/api/newsletter`) covered by `src/lib/rateLimit.ts`?
 - Is admin-only functionality gated by `src/lib/adminAuth.ts`'s cookie check, not just hidden by routing?
 - Any `any` type used as an escape hatch that could mask a validation gap?

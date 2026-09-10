@@ -5,15 +5,15 @@ import { Input, Label, Select, Textarea } from '@/components/ui/Field';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { INQUIRY_TYPES } from '@/lib/contact/inquiry-types';
+import { INQUIRY_TYPES, isInquiryTypeValue } from '@/lib/contact/inquiry-types';
 
 const contactSchema = z.object({
-  name: z.string().min(2),
+  name: z.string().min(2).max(100),
   email: z.string().email(),
-  phone: z.string().min(7),
-  companyName: z.string().min(2),
-  inquiryType: z.string().min(1),
-  message: z.string().min(20),
+  phone: z.string().min(7).max(20),
+  companyName: z.string().min(2).max(200),
+  inquiryType: z.string().refine(isInquiryTypeValue),
+  message: z.string().min(20).max(2000),
 });
 type ContactFormData = z.infer<typeof contactSchema>;
 
@@ -33,8 +33,12 @@ export function ContactForm() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
       });
-      if (res.ok) setSubmitted(true);
-      else setError('Something went wrong. Please try again.');
+      const body: unknown = await res.json().catch(() => null);
+      if (res.ok && body && typeof body === 'object' && 'success' in body && body.success === true) {
+        setSubmitted(true);
+      } else {
+        setError('Something went wrong. Please try again.');
+      }
     } catch { setError('Something went wrong. Please try again.'); }
   };
 
@@ -42,7 +46,7 @@ export function ContactForm() {
     <div className="bg-success-soft border border-success/30 rounded-2xl p-8 text-center">
       <div className="text-success text-[length:var(--step-4)] mb-3">✔</div>
       <h3 className="font-heading font-bold text-ink text-[length:var(--step-2)] mb-2">Inquiry Received</h3>
-      <p className="font-body text-muted text-[length:var(--step-0)]">You will receive a response within 24 hours.</p>
+      <p className="font-body text-muted text-[length:var(--step-0)]">Your inquiry has been stored securely.</p>
     </div>
   );
 
@@ -91,7 +95,7 @@ export function ContactForm() {
         <a href="/privacy" className="text-brand-ink underline hover:text-brand-ink transition-colors">Privacy Policy</a>.
       </p>
       <Button type="submit" disabled={isSubmitting} fullWidth className="min-h-[52px]">
-        {isSubmitting ? 'Sending...' : 'Send Inquiry →'}
+        {isSubmitting ? 'Sending...' : 'Send Inquiry'}
       </Button>
     </form>
   );

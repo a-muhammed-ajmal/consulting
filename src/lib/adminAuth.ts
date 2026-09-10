@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { createAdminClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
-import { createHash } from "node:crypto";
+import { hashAdminSessionToken } from '@/lib/adminSession';
 
 export interface AdminAuthContext {
   /** Stable, non-secret audit identifier derived from the admin session token. */
@@ -19,13 +19,13 @@ export async function getAdminAuthContext(): Promise<AdminAuthContext | null> {
   const { data, error } = await supabase
     .from("admin_sessions")
     .select("expires_at")
-    .eq("session_token", sessionToken)
+    .eq("session_token", hashAdminSessionToken(sessionToken))
     .single();
 
   if (error || !data || new Date(data.expires_at) < new Date()) return null;
 
   return {
-    identifier: createHash("sha256").update(sessionToken).digest("hex").slice(0, 16),
+    identifier: hashAdminSessionToken(sessionToken).slice(0, 16),
   };
 }
 

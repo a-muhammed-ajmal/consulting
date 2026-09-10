@@ -1,17 +1,7 @@
 /*
- * ⚠️ DRAFT FOR AJMAL'S REVIEW — NOT LEGAL ADVICE.
- *
- * This privacy policy is aligned to the UAE Personal Data Protection Law
- * (Federal Decree-Law No. 45 of 2021) and its Executive Regulation
- * (Cabinet Decision No. 33 of 2024) to the best of a non-lawyer's ability.
- * It MUST be reviewed by a UAE-qualified lawyer before you rely on it.
- *
- * Before publishing, confirm each of these is true and current:
- *   - The privacy contact mailbox below (privacy@muhammedajmal.com) actually exists
- *     and is monitored — or change it to one that is.
- *   - The list of third-party processors matches what the site actually uses.
- *   - The retention periods reflect how long you genuinely keep each record.
- *   - The "Last updated" date is refreshed whenever the policy changes.
+ * Operational privacy notice. Keep the provider list, retention schedule, and
+ * contact channel synchronized with the deployed service. Legal rights remain
+ * qualified by applicable law rather than overstated as unconditional promises.
  */
 import Link from 'next/link';
 import { ArticleToc, type TocItem } from '@/components/insights/ArticleToc';
@@ -21,11 +11,11 @@ import { pageMetadata } from '@/lib/metadata';
 export const metadata = pageMetadata({
   title: 'Privacy Policy',
   description:
-    'How Muhammed Ajmal Consulting collects, uses, and protects your personal data, aligned to the UAE Personal Data Protection Law (Federal Decree-Law No. 45 of 2021).',
+    'How Muhammed Ajmal Consulting collects, uses, retains, and protects personal data under applicable UAE data protection requirements.',
   path: '/privacy',
 });
 
-const LAST_UPDATED = '21 August 2026';
+const LAST_UPDATED = '10 September 2026';
 const PRIVACY_EMAIL = 'privacy@muhammedajmal.com';
 
 const dataCollected: { item: string; detail: string }[] = [
@@ -40,18 +30,19 @@ const dataCollected: { item: string; detail: string }[] = [
 const processors: { name: string; role: string; location: string }[] = [
   { name: 'Supabase', role: 'Database hosting — stores your submissions.', location: 'Servers outside the UAE' },
   { name: 'Resend', role: 'Email delivery — sends your report and our replies.', location: 'Servers outside the UAE' },
-  { name: 'Vercel', role: 'Website hosting and infrastructure.', location: 'Servers outside the UAE' },
+  { name: 'Vercel', role: 'Website hosting, infrastructure, and site-usage analytics.', location: 'Servers outside the UAE' },
+  { name: 'Cloudflare', role: 'DNS, network security, content delivery, and related request logs.', location: 'Global network, including locations outside the UAE' },
   { name: 'Calendly', role: 'Consultation scheduling, if you choose to book a call.', location: 'Servers outside the UAE' },
 ];
 
 const rights: string[] = [
-  'Be informed about how your personal data is processed.',
-  'Access the personal data we hold about you.',
+  'Ask how your personal data is processed.',
+  'Request access to the personal data we hold about you.',
   'Request correction of inaccurate or incomplete data.',
-  'Request erasure of your data.',
-  'Restrict or stop the processing of your data.',
-  'Request your data in a structured, portable format.',
-  'Withdraw consent at any time, without affecting processing already carried out.',
+  'Request erasure where the applicable conditions are met.',
+  'Request restriction or cessation of processing where applicable.',
+  'Request data portability where applicable.',
+  'Withdraw consent where consent is the basis for processing, without affecting earlier lawful processing.',
 ];
 
 /** Slug for the in-page anchor. Derived from the heading so the two cannot drift. */
@@ -107,8 +98,8 @@ export default function PrivacyPage() {
           <div className="bg-white border-l-4 border-brand rounded-r-lg p-5 shadow-1">
             <p className="text-[length:var(--step-0)] text-muted">
               This policy explains how Muhammed Ajmal Consulting (&ldquo;we&rdquo;, &ldquo;us&rdquo;) handles your
-              personal data. It is aligned to the UAE Personal Data Protection Law — Federal Decree-Law
-              No. 45 of 2021 — and its Executive Regulation, Cabinet Decision No. 33 of 2024.
+              personal data. We handle personal data under applicable UAE data-protection requirements,
+              including Federal Decree-Law No. 45 of 2021 on the Protection of Personal Data.
             </p>
           </div>
 
@@ -156,24 +147,24 @@ export default function PrivacyPage() {
 
           <Section heading="Cross-border transfer">
             <p>
-              The service providers above host data on servers outside the UAE, including in the United
-              States and Europe. This means your personal data is transferred internationally. We only use
-              providers that offer contractual and technical protections for the data they handle on our
-              behalf, consistent with the cross-border transfer provisions of the PDPL.
+              Some service providers above process or store data outside the UAE. When an international
+              transfer occurs, we use the provider and handle the transfer subject to applicable UAE
+              data-protection requirements and the safeguards available for that service.
             </p>
           </Section>
 
           <Section heading="How long we keep it">
             <p>
-              We keep diagnostic and inquiry records for as long as there is a genuine prospect of working
-              together, and for up to 24 months after our last contact, after which they are deleted or
-              anonymised. Newsletter subscriptions are kept until you unsubscribe. You can ask us to delete
-              your data sooner at any time.
+              Incomplete diagnostic attempts are deleted after 30 days. Completed diagnostic records,
+              contact inquiries, and historic lead records are deleted 24 months after submission.
+              Active newsletter subscriptions are retained until you unsubscribe; unsubscribed records are
+              deleted after 30 days. Expired admin sessions and temporary rate-limit records are also removed
+              automatically. You may ask us to delete eligible personal data sooner.
             </p>
           </Section>
 
           <Section heading="Your rights under the PDPL">
-            <p>Under the UAE Personal Data Protection Law, you have the right to:</p>
+            <p>Subject to the conditions and exceptions in applicable UAE law, you may have the right to:</p>
             <ul className="space-y-2">
               {rights.map((r) => (
                 <li key={r} className="flex gap-3">

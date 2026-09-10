@@ -3,9 +3,18 @@ import { createHmac, timingSafeEqual } from 'node:crypto';
 const TOKEN_PREFIX = 'fdi1';
 
 function signingKey(): string {
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!key) throw new Error('SUPABASE_SERVICE_ROLE_KEY is required to protect FDI sessions.');
-  return key;
+  const dedicatedKey = process.env.FDI_SESSION_SIGNING_SECRET?.trim();
+  if (dedicatedKey) {
+    if (dedicatedKey.length < 32) throw new Error('FDI_SESSION_SIGNING_SECRET must contain at least 32 characters.');
+    return dedicatedKey;
+  }
+
+  // Backward-compatible fallback keeps current sessions valid until the
+  // dedicated secret is configured. New deployments should set it so rotating
+  // the Supabase service-role key does not invalidate active diagnostic flows.
+  const fallbackKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!fallbackKey) throw new Error('FDI_SESSION_SIGNING_SECRET or SUPABASE_SERVICE_ROLE_KEY is required to protect FDI sessions.');
+  return fallbackKey;
 }
 
 function signature(sessionId: string): string {
