@@ -542,12 +542,13 @@ Run before every release.
 
 ## 12. Current implementation status
 
-As of September 10, 2026, the release includes the public website, contact
+As of September 11, 2026, the release includes the public website, contact
 and newsletter flows, Operating Conversation booking, protected
 administration, canonical redirects, deterministic Business Health Check,
 site-wide security headers, hashed and revocable admin sessions, and an
-application-data retention job. Production status remains subject to the
-publishing checks above and application of every committed migration.
+application-data retention job. The release has passed the publishing checks
+above, every committed migration is applied to the consulting production
+project, and the scheduled retention job is active.
 
 Completed website work is not reopened as planning work unless a new
 verified defect, approved owner change, processor/data-practice change, or
