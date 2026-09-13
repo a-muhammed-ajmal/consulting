@@ -6,9 +6,12 @@ export const fdiAnswerMapSchema = z.record(z.string().min(1), z.string().min(1))
 );
 
 /**
- * Sector options offered on the final screen. The three commercial primary
- * sectors live in src/lib/fdi/qualification.ts; everything else here simply
- * classifies as secondary. Adding an option never affects an FDI score.
+ * Sector options offered on the final screen. The Business Health Check
+ * primary qualification categories (FDI_PRIMARY_SECTORS in
+ * src/lib/fdi/qualification.ts) are separate from ANCHOR's internal
+ * acquisition Primary sectors; everything else here simply classifies as
+ * secondary for qualification purposes. Adding an option never affects an
+ * FDI score.
  */
 /** Sector taxonomy used by historic FDI-1.0 sessions. */
 export const FDI_1_0_SECTOR_VALUES = [

@@ -453,11 +453,17 @@ The production Calendly destination is provided through
 the client bundle at build time, changing this booking value requires a
 new deployment before visitors receive it.
 
-Newsletter persistence uses Supabase upsert semantics and must inspect the
-returned error object before reporting success. Contact persistence must
-likewise inspect database results. Transactional email delivery through
-Resend is treated as a separate operation from successful database
-persistence; send failures are recorded rather than silently discarded.
+Newsletter persistence is insert-first, not upsert: the route attempts an
+insert, treats a Postgres unique-violation (`23505`) as the signal that
+the address already exists, then reads the existing row and reactivates
+it if unsubscribed. This lets the route distinguish a genuinely new
+subscriber from an existing one before deciding which notification
+emails to send — a plain upsert cannot make that distinction. It must
+inspect the returned error object at each step before reporting success.
+Contact persistence must likewise inspect database results. Transactional
+email delivery through Resend is treated as a separate operation from
+successful database persistence; send failures are recorded rather than
+silently discarded, and never reverse a successful subscription.
 
 Database migrations must target the production website project explicitly.
 Do not infer the production project from whichever Supabase connector is

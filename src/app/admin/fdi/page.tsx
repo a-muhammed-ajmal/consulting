@@ -18,6 +18,25 @@ type FdiSessionListRow = {
   readonly email_sent: boolean;
 };
 
+/**
+ * BHC qualification is the public Business Health Check intake category —
+ * separate from ANCHOR's internal acquisition-sector priority. Unknown or
+ * historic values (e.g. legacy FDI-1.0 rows) fall back to the raw value
+ * rather than crashing.
+ */
+const QUALIFICATION_LABELS: Record<string, string> = {
+  qualified_primary: 'BHC primary category',
+  qualified_secondary: 'BHC secondary category',
+  outside_target_profile: 'Outside target profile',
+  not_assessed: 'Not assessed',
+  disqualified: 'Disqualified (legacy FDI-1.0)',
+};
+
+function formatQualification(value: string | null): string {
+  if (value === null) return 'Pending';
+  return QUALIFICATION_LABELS[value] ?? value;
+}
+
 export default async function AdminFdiPage() {
   await requireAdminAuth();
   const supabase = createAdminClient();
@@ -41,9 +60,9 @@ export default async function AdminFdiPage() {
         <div className="flex items-center gap-4"><Link href="/diagnostic?testMode=true" className="text-xs text-brand-ink hover:text-brand">Start Test Mode</Link><AdminSignOut /></div>
       </nav>
       <section className="max-w-7xl mx-auto px-4 py-8">
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4"><div><p className="eyebrow text-brand-ink">Founder Dependency Index</p><h1 className="font-heading font-extrabold text-ink text-[length:var(--step-3)] mt-2">FDI sessions</h1><p className="font-body text-[length:var(--step-0)] text-muted mt-2">Live and test records are separated. Qualification is consultant-only.</p></div></div>
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4"><div><p className="eyebrow text-brand-ink">Founder Dependency Index</p><h1 className="font-heading font-extrabold text-ink text-[length:var(--step-3)] mt-2">FDI sessions</h1><p className="font-body text-[length:var(--step-0)] text-muted mt-2">Live and test records are separated. BHC qualification is consultant-only and separate from acquisition-sector priority.</p></div></div>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6"><div className="bg-white border border-line rounded-xl p-5"><p className="font-body text-xs font-medium uppercase text-muted">Live completed</p><p className="font-mono font-heading font-extrabold text-ink text-[length:var(--step-4)] mt-2">{liveCompleted.length}</p></div><div className="bg-white border border-line rounded-xl p-5"><p className="font-body text-xs font-medium uppercase text-muted">Live in progress</p><p className="font-mono font-heading font-extrabold text-ink text-[length:var(--step-4)] mt-2">{liveInProgress.length}</p></div><div className="bg-white border border-line rounded-xl p-5"><p className="font-body text-xs font-medium uppercase text-muted">Explicit test records</p><p className="font-mono font-heading font-extrabold text-ink text-[length:var(--step-4)] mt-2">{testSessions.length}</p></div></div>
-        <div className="bg-white border border-line rounded-xl shadow-1 overflow-hidden mt-6"><div className="overflow-x-auto"><table className="w-full text-[length:var(--step-0)]"><thead className="sticky top-0 z-10 bg-white text-ink"><tr>{['Date', 'Respondent', 'Company', 'Status', 'FDI', 'Qualification', 'Email', 'Record'].map((label) => <th key={label} className="h-11 px-4 text-left font-body text-xs font-medium uppercase whitespace-nowrap">{label}</th>)}</tr></thead><tbody className="divide-y divide-line">{sessions.map((session) => <tr key={session.id} className="h-11 hover:bg-brand-tint"><td className="px-4 py-3 font-body text-xs text-muted whitespace-nowrap">{new Date(session.created_at).toLocaleDateString('en-AE', { day: 'numeric', month: 'short', year: 'numeric' })}</td><td className="px-4 py-3"><p className="font-heading font-semibold text-ink">{session.name ?? '—'}</p><p className="font-body text-xs text-muted">{session.email ?? 'No contact yet'}</p></td><td className="px-4 py-3 font-body text-xs text-muted">{session.company_name ?? '—'}</td><td className="px-4 py-3"><span className={session.status === 'completed' ? 'text-xs font-bold text-success' : 'text-xs font-bold text-warning'}>{session.status === 'completed' ? 'Completed' : 'In progress'}</span></td><td className="px-4 py-3 text-right font-mono font-heading font-bold text-ink">{session.fdi_display === null ? '—' : `${session.fdi_display} / 100`}<p className="font-body text-xs font-normal text-muted">{session.band_label ?? ''}</p></td><td className="px-4 py-3 font-body text-xs text-muted">{session.qualification_result ?? 'Pending'}</td><td className="px-4 py-3 font-body text-xs">{session.status === 'completed' ? (session.email_sent ? <span className="text-success">Sent</span> : <span className="text-danger">Pending</span>) : '—'}</td><td className="px-4 py-3"><Link href={`/admin/fdi/${session.id}`} className="font-heading text-xs font-bold text-brand-ink hover:underline">{session.is_test ? 'Test record →' : 'View →'}</Link></td></tr>)}</tbody></table></div>{sessions.length === 0 && <p className="font-body text-[length:var(--step-0)] text-muted p-8 text-center">No FDI sessions yet.</p>}</div>
+        <div className="bg-white border border-line rounded-xl shadow-1 overflow-hidden mt-6"><div className="overflow-x-auto"><table className="w-full text-[length:var(--step-0)]"><thead className="sticky top-0 z-10 bg-white text-ink"><tr>{['Date', 'Respondent', 'Company', 'Status', 'FDI', 'BHC qualification', 'Email', 'Record'].map((label) => <th key={label} className="h-11 px-4 text-left font-body text-xs font-medium uppercase whitespace-nowrap">{label}</th>)}</tr></thead><tbody className="divide-y divide-line">{sessions.map((session) => <tr key={session.id} className="h-11 hover:bg-brand-tint"><td className="px-4 py-3 font-body text-xs text-muted whitespace-nowrap">{new Date(session.created_at).toLocaleDateString('en-AE', { day: 'numeric', month: 'short', year: 'numeric' })}</td><td className="px-4 py-3"><p className="font-heading font-semibold text-ink">{session.name ?? '—'}</p><p className="font-body text-xs text-muted">{session.email ?? 'No contact yet'}</p></td><td className="px-4 py-3 font-body text-xs text-muted">{session.company_name ?? '—'}</td><td className="px-4 py-3"><span className={session.status === 'completed' ? 'text-xs font-bold text-success' : 'text-xs font-bold text-warning'}>{session.status === 'completed' ? 'Completed' : 'In progress'}</span></td><td className="px-4 py-3 text-right font-mono font-heading font-bold text-ink">{session.fdi_display === null ? '—' : `${session.fdi_display} / 100`}<p className="font-body text-xs font-normal text-muted">{session.band_label ?? ''}</p></td><td className="px-4 py-3 font-body text-xs text-muted">{formatQualification(session.qualification_result)}</td><td className="px-4 py-3 font-body text-xs">{session.status === 'completed' ? (session.email_sent ? <span className="text-success">Sent</span> : <span className="text-danger">Pending</span>) : '—'}</td><td className="px-4 py-3"><Link href={`/admin/fdi/${session.id}`} className="font-heading text-xs font-bold text-brand-ink hover:underline">{session.is_test ? 'Test record →' : 'View →'}</Link></td></tr>)}</tbody></table></div>{sessions.length === 0 && <p className="font-body text-[length:var(--step-0)] text-muted p-8 text-center">No FDI sessions yet.</p>}</div>
       </section>
     </div>
   );
