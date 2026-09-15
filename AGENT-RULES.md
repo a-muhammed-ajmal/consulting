@@ -15,18 +15,17 @@ forward. Everything below applies to every session, indefinitely.
 
 Defined once in `AGENTS.md`. It outranks every other instruction in every file.
 
-### Owner approval gate — `#APPROVED-AJMAL#`
+### Approval
 
-Without a fresh standalone `#APPROVED-AJMAL#`, an agent may only read, inspect, research, analyze, verify, and recommend.
+The approval model is defined in one place: **`SYSTEM-MAP.md` at the root of the `a-muhammed-ajmal/muhammed-ajmal-consulting` repository.** This file does not define a second one.
 
-Before any add, save, update, edit, delete, send, publish, schedule, create, deploy, commit, push, or other change anywhere:
+In summary, and subordinate to the map:
 
-1. Tell Ajmal exactly **what** will change, **where**, and **why**.
-2. Wait for his fresh standalone `#APPROVED-AJMAL#`.
-3. Make only the exact approved change or clearly listed group of changes.
-4. Ask again before every later change.
+- Without a defined approved change, an agent may read, inspect, research, analyze, verify and recommend.
+- When Ajmal approves a clearly defined change, that approval covers every internal write required to make that change consistent. State the scope before execution, then perform, verify and report. Do not stop for a fresh approval merely because the same approved change touches several dependent internal files.
+- **Advance confirmation is still required, every time, for:** deployment, publishing, any external send, destructive actions, deletion, financial or legal commitments, credential, account or security changes, and anything a platform or safety rule requires to be confirmed in advance.
 
-A previous approval does not carry forward. The marker does not override mandatory safety, platform, legal, or destructive-action safeguards. All editing and release rules below remain additional requirements; satisfying them does not remove this approval gate.
+The file-specific protections below are additional requirements. Satisfying the approval model does not remove them, and they are not a competing approval model — they are controls on particular documents.
 
 ---
 
@@ -72,6 +71,8 @@ When two sources disagree, the higher one wins:
 5. DESIGN
 6. The deployed codebase
 
+For system ownership, routing and completion control — which system owns which information — the System Map in the business repository is the authority, above every file here.
+
 Two standing exceptions where the codebase is truth and the document is corrected to match it:
 
 - `globals.css` for design token values
@@ -90,11 +91,11 @@ An edit requires all four of these:
 3. The agent quotes the current text back before changing it.
 4. The user confirms after seeing that quote.
 
-The confirmation in step 4 must satisfy the Owner approval gate above before any edit is made.
+This four-step requirement is specific to this file and stands on its own. It is not satisfied by a general approved change elsewhere.
 
 **A request to "align the documents," "fix inconsistencies," or "update everything" is never authorization to change ANCHOR.** Where another file disagrees with it, the other file is what changes.
 
-Finding that the code, the site, or another document contradicts ANCHOR is not grounds for an edit. It is grounds for changing the code, the site, or the other document, after the required owner approval.
+Finding that the code, the site, or another document contradicts ANCHOR is not grounds for an edit. It is grounds for changing the code, the site, or the other document.
 
 ---
 
@@ -105,8 +106,6 @@ PRODUCT, WEB, and DESIGN are editable, with three conditions:
 - Name the document and the section before editing.
 - State what changes and why.
 - Never edit one to resolve a conflict with ANCHOR. ANCHOR wins.
-
-All edits also require the Owner approval gate above.
 
 Three blocks inside these documents are frozen and reproduced word for word:
 
@@ -133,7 +132,7 @@ Three blocks inside these documents are frozen and reproduced word for word:
 1. Stop. Do not edit.
 2. Report: which two sources, the exact text of each, and file paths with line numbers.
 3. State which one the authority order in §2 makes correct.
-4. Wait for a decision and the required Owner approval gate before any change.
+4. Wait for a decision before any change.
 
 This applies even when the correct answer looks obvious.
 
