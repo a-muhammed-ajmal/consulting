@@ -1,16 +1,14 @@
-import { ArrowRight, CircleCheck, Clock, Compass, Cpu, Eye, GitBranch, Repeat, Settings2, ShieldAlert, Users } from "lucide-react";
-import { DependencyIndexPreview, FounderSystemVisual } from "@/components/home/SystemVisuals";
+import { ArrowRight, CircleCheck, Clock, Compass, Cpu, Eye, Settings2, Users } from "lucide-react";
+import { DependencyIndexPreview, FounderSystemVisual, FounderTrapDiagram } from "@/components/home/SystemVisuals";
 import { ArchitectureLadder, GrowthFormulaRail } from "@/components/home/Graphics";
 import { Accordion } from "@/components/ui/Accordion";
 import { Button } from "@/components/ui/Button";
-import { CardGrid, CardGridItem } from "@/components/ui/CardGrid";
 import { CTABand } from "@/components/ui/CTABand";
 import { IconTile } from "@/components/ui/IconTile";
 import { PageHero } from "@/components/ui/PageHero";
 import { Section } from "@/components/ui/Section";
 import { StageRail } from "@/components/ui/StageRail";
-import { Surface, SectionHeader } from "@/components/ui/Surface";
-import { TrustMarquee } from "@/components/ui/TrustMarquee";
+import { SectionHeader } from "@/components/ui/Surface";
 import { pageMetadata } from "@/lib/metadata";
 import { jsonLdScript, personAndServiceJsonLd } from "@/lib/jsonLd";
 
@@ -30,14 +28,6 @@ const scopeAreas = [
   { title: "Systems", body: "Processes, SOPs, management rhythm, KPIs, and structure.", Icon: Settings2 },
   { title: "People", body: "Roles, ownership, decision rights, accountability, and capability.", Icon: Users },
   { title: "Applied AI", body: "Automation and AI where they improve capacity, speed, or visibility.", Icon: Cpu },
-];
-
-/* ANCHOR §10.1 — the four observable symptoms, verbatim. */
-const trapSymptoms = [
-  { label: "Approval bottlenecks", detail: "Work waits for a founder decision.", Icon: Clock },
-  { label: "Knowledge trapped in people", detail: "Critical know-how is not accessible.", Icon: GitBranch },
-  { label: "Firefighting", detail: "Urgent issues replace planned work.", Icon: ShieldAlert },
-  { label: "Inconsistent execution", detail: "Standards change by person or day.", Icon: Repeat },
 ];
 
 /* ANCHOR §10.2 — the three components the index is built from. */
@@ -126,8 +116,6 @@ export default function HomePage() {
         ))}
       />
 
-      <TrustMarquee items={trapSymptoms.map((symptom) => symptom.label)} />
-
       <Section tone="tint" width="wide" compact aria-label="Growth Formula">
         <GrowthFormulaRail />
       </Section>
@@ -141,30 +129,9 @@ export default function HomePage() {
           title="When growth still depends on one person."
           description="The pattern is visible in how decisions move, where knowledge sits, how the team responds to change, and whether work is done consistently."
         />
-        <CardGrid className="mt-12" columns={4} scrollReveal>
-          {trapSymptoms.map(({ label, detail, Icon }, index) => (
-            <CardGridItem key={label} scrollReveal>
-              <Surface
-                interactive
-                raised
-                className="h-full"
-                header={
-                  <>
-                    <IconTile variant="numeral" size="md" className="icon-tile-spring">
-                      {String(index + 1).padStart(2, "0")}
-                    </IconTile>
-                    <h3 className="font-heading text-[length:var(--step-1)] font-bold text-ink">{label}</h3>
-                  </>
-                }
-              >
-                <p className="flex items-start gap-2.5 font-body text-[length:var(--step-0)] leading-relaxed text-muted">
-                  <Icon className="mt-0.5 h-4 w-4 shrink-0 text-brand" strokeWidth={2.25} aria-hidden="true" />
-                  {detail}
-                </p>
-              </Surface>
-            </CardGridItem>
-          ))}
-        </CardGrid>
+        <div className="mt-12 rounded-3xl border border-line bg-white p-5 shadow-2 sm:p-7 lg:p-10">
+          <FounderTrapDiagram />
+        </div>
       </Section>
 
       <DependencyIndexPreview />
