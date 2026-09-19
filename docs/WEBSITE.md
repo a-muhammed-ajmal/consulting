@@ -276,6 +276,28 @@ never change the result.
 Test mode is protected by authenticated admin access and is visibly
 marked as a test record.
 
+The opening section carries three owner-approved lines that appear in no
+other document. They were approved as written on September 19, 2026, and
+are recorded here so a later pass does not read them as unsupported
+claims and remove them.
+
+| Placement | Approved line |
+| :---- | :---- |
+| Opening panel | A stronger business. A freer founder. |
+| Assurance | Free — No obligation |
+| Assurance | Takes 5 minutes — 12 focused questions |
+| Assurance | Private — Your information is confidential |
+
+"Takes 5 minutes" is an approved expectation for the respondent, not a
+measured figure. It is never presented as a result, a benchmark, or a
+claim about the business.
+
+The opening section also renders the mechanism as a figure: the three
+operating components feed the 12 questions, which return the Founder
+Dependency Index. The index appears there as its full name and a glyph
+only. No number, band label, filled meter, or sample reading appears
+before the founder has answered.
+
 ### Results — /results
 
 A browser-private report. Shows the overall score, band label, three

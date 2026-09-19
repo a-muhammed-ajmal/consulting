@@ -27,7 +27,11 @@ describe('FDI-1.1 intro requirements', () => {
     expect(source).toContain('width={1536}');
     expect(source).toContain('height={1024}');
     expect(source).toContain('className="h-full w-full object-contain"');
-    expect(source).toContain('unoptimized');
+    /* The LCP element on this route. `priority` preloads it, and the optimizer
+       has to stay on: the source PNG is 1.5 MB, which `unoptimized` would ship
+       whole to every phone. */
+    expect(source).toContain('priority');
+    expect(source).not.toContain('unoptimized');
     expect(source).not.toContain('grid-cols-[64px_24px_minmax(0,1fr)]');
     expect(source).not.toContain('grid items-stretch');
     expect(source).not.toContain('function FlowConnector');
@@ -36,6 +40,33 @@ describe('FDI-1.1 intro requirements', () => {
     expect(artwork.readUInt32BE(16)).toBeGreaterThan(0);
     expect(artwork.readUInt32BE(20)).toBeGreaterThan(0);
     expect(artwork[25]).toBe(6); // RGBA: preserve the extracted artwork's transparency.
+  });
+
+  it('opens with the mechanism, the owner-approved assurances, and no invented reading', () => {
+    const intro = source.slice(source.indexOf("  if (stage === 'intro')"), source.indexOf("  if (stage === 'submitting')"));
+    expect(intro).toContain('<IntroSignalFlow />');
+    expect(intro).toContain('<IntroAssurances />');
+    /* Owner-approved hero copy. Recorded against WEB SS8 so a later pass does not
+       read these as unsupported claims and strip them. */
+    expect(source).toContain('A stronger business. A freer founder.');
+    expect(source).toContain("['Free', 'No obligation', LockKeyhole]");
+    expect(source).toContain("['Takes 5 minutes', '12 focused questions', Clock]");
+    expect(source).toContain("['Private', 'Your information is confidential', ShieldCheck]");
+    /* The index card names the result and shows a glyph. A number, a band, or a
+       filled meter here would be an invented reading. */
+    expect(source).toContain('Your Founder Dependency Index');
+    expect(intro).not.toMatch(/\d+\s*\/\s*100/);
+    expect(intro).not.toContain('%');
+    expect(intro).not.toMatch(/(Low|Moderate|High|Very High) Founder Dependency/);
+  });
+
+  it('abbreviates the three signals in the hero without restating their labels', () => {
+    expect(source).toContain("short: 'Can decisions continue?'");
+    expect(source).toContain("short: 'Can work maintain its standard?'");
+    expect(source).toContain(`short: "Can you see what's happening?"`);
+    /* The hero reads the same constant the fuller section below it does, so the
+       three labels cannot drift apart. */
+    expect(source.match(/const INDEX_COMPONENTS/g)).toHaveLength(1);
   });
 
   it('makes only the intro a scrollable landing page with native sections and readable facts', () => {

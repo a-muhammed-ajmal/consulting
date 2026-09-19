@@ -92,7 +92,7 @@ it rather than reading the CSS.
 
 | Metric | Count |
 | :---- | :---- |
-| Tests | 431 passing (44 suites), 78.86% statement coverage |
+| Tests | 433 passing (44 suites), 78.86% statement coverage |
 | DB tables | 8 |
 | Migrations | 7 |
 | Routes | 19 page routes, 9 API route handlers |

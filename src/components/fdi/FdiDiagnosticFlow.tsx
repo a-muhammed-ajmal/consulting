@@ -10,6 +10,7 @@ import {
   CheckCircle2,
   ChevronDown,
   ClipboardCheck,
+  Clock,
   Eye,
   LockKeyhole,
   Save,
@@ -81,6 +82,8 @@ interface IndexComponent {
   readonly key: 'DS' | 'EC' | 'OV';
   readonly label: string;
   readonly description: string;
+  /** The hero diagram's abbreviated form. `description` carries the full question. */
+  readonly short: string;
   readonly icon: LucideIcon;
 }
 
@@ -90,18 +93,21 @@ const INDEX_COMPONENTS: readonly IndexComponent[] = [
     key: 'DS',
     label: 'Decision Speed',
     description: 'Can decisions continue without you?',
+    short: 'Can decisions continue?',
     icon: Zap,
   },
   {
     key: 'EC',
     label: 'Execution Consistency',
     description: 'Can recurring work maintain its standard?',
+    short: 'Can work maintain its standard?',
     icon: Settings2,
   },
   {
     key: 'OV',
     label: 'Operational Visibility',
     description: 'Can you see what is happening without chasing updates?',
+    short: "Can you see what's happening?",
     icon: BarChart3,
   },
 ];
@@ -122,6 +128,14 @@ const INTRO_FACTS: readonly (readonly [string, string, LucideIcon])[] = [
   ['12 questions', 'Four questions across each operating component', ClipboardCheck],
   ['Progress saved', 'You can leave before completion; an unfinished attempt receives no score or email', Save],
   ['Self-report only', 'The result identifies reported patterns. It does not diagnose root causes', ShieldCheck],
+];
+
+/* The three objections the opening screen answers before asking anything: cost,
+   time, and privacy. Owner-approved copy — see WEB SS8, Diagnostic. */
+const HERO_ASSURANCES: readonly (readonly [string, string, LucideIcon])[] = [
+  ['Free', 'No obligation', LockKeyhole],
+  ['Takes 5 minutes', '12 focused questions', Clock],
+  ['Private', 'Your information is confidential', ShieldCheck],
 ];
 
 function completionMsFrom(startedAt: number | null): number | undefined {
@@ -216,21 +230,113 @@ function IntroFacts() {
   );
 }
 
+/**
+ * The opening panel: the founder illustration under its pull-quote, inside a
+ * framed wash.
+ *
+ * The image is the LCP element on this route, so it carries `priority` rather
+ * than `loading="eager"` and goes through the Next optimizer — the source PNG is
+ * 1.5 MB, and AVIF/WebP preserve its alpha at roughly a tenth of the bytes.
+ */
 function IntroArtwork() {
   return (
-    <figure className="relative isolate mx-auto aspect-[3/2] w-full max-w-lg">
-      <div className="pointer-events-none absolute inset-y-4 right-4 -z-10 aspect-square rounded-full bg-brand-tint" aria-hidden="true" />
-      <Image
-        src="/images/diagnostic/founder-operations.png"
-        alt="Illustration of a founder managing work at a laptop"
-        width={1536}
-        height={1024}
-        sizes="(min-width: 1024px) 480px, (min-width: 768px) 360px, 100vw"
-        loading="eager"
-        unoptimized
-        className="h-full w-full object-contain"
-      />
+    <figure className="relative isolate mx-auto w-full max-w-lg overflow-hidden rounded-3xl border border-line bg-gradient-to-b from-electric-50 via-brand-tint to-white p-5 md:p-6">
+      <p className="ml-auto max-w-[13rem] text-right font-heading text-[length:var(--step-0)] font-semibold italic leading-snug text-ink md:max-w-[15rem] md:text-[length:var(--step-3)]">
+        A stronger business. A freer founder.
+      </p>
+      <div className="relative mt-4 aspect-[3/2] w-full">
+        <div className="pointer-events-none absolute inset-y-2 right-2 -z-10 aspect-square rounded-full bg-brand-soft" aria-hidden="true" />
+        <Image
+          src="/images/diagnostic/founder-operations.png"
+          alt="Illustration of a founder managing work at a laptop"
+          width={1536}
+          height={1024}
+          sizes="(min-width: 1024px) 480px, (min-width: 768px) 360px, 100vw"
+          priority
+          className="h-full w-full object-contain"
+        />
+      </div>
     </figure>
+  );
+}
+
+/**
+ * The mechanism in one figure: three operating signals feed twelve questions,
+ * which return the index.
+ *
+ * Connectors are CSS borders rather than an SVG for the reason recorded in
+ * `src/components/home/Graphics.tsx` — a scaled drawing collapses below the
+ * legible floor on a 375px screen. The bracket stretches to the card column's
+ * own height, so it stays aligned when a label wraps to a second line.
+ *
+ * The index card shows a glyph and its name only. Rendering a number, a filled
+ * meter, or a sample band here would be an invented reading (DESIGN SS7).
+ */
+function IntroSignalFlow() {
+  return (
+    <div className="mt-8 flex flex-col items-center gap-4 md:mt-12 md:flex-row md:justify-center md:gap-0">
+      <ul className="flex w-full max-w-sm flex-col gap-3 md:w-72 md:max-w-none md:shrink-0">
+        {INDEX_COMPONENTS.map(({ key, label, short, icon: Icon }) => (
+          <li key={key} className="flex min-w-0 items-center gap-3 rounded-2xl border border-line bg-white p-3 shadow-1">
+            <span
+              className={cn(
+                'flex h-10 w-10 shrink-0 items-center justify-center rounded-xl',
+                key === 'EC' ? 'bg-accent text-ink' : 'bg-brand text-white',
+              )}
+              aria-hidden="true"
+            >
+              <Icon className="h-5 w-5" />
+            </span>
+            <div className="min-w-0">
+              <p className="font-heading text-[length:var(--step-0)] font-bold leading-snug text-ink">{label}</p>
+              <p className="mt-0.5 font-body text-xs leading-snug text-muted">{short}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+
+      <span
+        className="h-5 w-0.5 shrink-0 bg-brand/40 md:my-10 md:h-auto md:w-6 md:self-stretch md:rounded-r-2xl md:border-y-2 md:border-r-2 md:border-brand/40 md:bg-transparent"
+        aria-hidden="true"
+      />
+      <span className="hidden shrink-0 md:block md:h-0.5 md:w-5 md:bg-brand/40" aria-hidden="true" />
+
+      <div className="flex h-24 w-24 shrink-0 flex-col items-center justify-center rounded-full bg-canvas-dark text-white md:h-28 md:w-28">
+        <span className="font-heading text-[length:var(--step-3)] font-extrabold leading-none md:text-[length:var(--step-4)]">12</span>
+        <span className="mt-1 font-body text-[length:var(--step--1)] font-medium uppercase leading-none text-muted-invert">Questions</span>
+      </div>
+
+      <ArrowRight className="h-6 w-6 shrink-0 rotate-90 text-brand md:mx-4 md:rotate-0" aria-hidden="true" />
+
+      <Surface className="flex w-full max-w-sm items-center gap-3 p-4 md:w-48 md:max-w-none md:shrink-0 md:flex-col md:text-center">
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-soft text-brand-ink" aria-hidden="true">
+          <BarChart3 className="h-5 w-5" />
+        </span>
+        <p className="font-heading text-[length:var(--step-0)] font-bold leading-snug text-ink">Your Founder Dependency Index</p>
+      </Surface>
+    </div>
+  );
+}
+
+/**
+ * The three objections answered before the founder commits: cost, time, privacy.
+ *
+ * Three-up from 420px, which is where the columns stop crushing the sub-lines;
+ * stacked below that so the 320px overflow check holds.
+ */
+function IntroAssurances() {
+  return (
+    <ul className="mx-auto mt-8 grid max-w-4xl gap-4 border-t border-line pt-6 min-[420px]:grid-cols-3 md:mt-12 md:gap-6 md:pt-8">
+      {HERO_ASSURANCES.map(([title, note, Icon]) => (
+        <li key={title} className="flex min-w-0 items-center gap-3 min-[420px]:justify-center">
+          <Icon className="h-6 w-6 shrink-0 text-brand-ink" aria-hidden="true" />
+          <div className="min-w-0">
+            <p className="font-heading text-[length:var(--step-0)] font-bold leading-snug text-ink">{title}</p>
+            <p className="mt-0.5 font-body text-xs leading-snug text-muted">{note}</p>
+          </div>
+        </li>
+      ))}
+    </ul>
   );
 }
 
@@ -443,7 +549,11 @@ export function FdiDiagnosticFlow() {
           </div>
         </header>
 
-        <Section aria-label="Business Health Check introduction" width="wide" className="py-8 md:py-16">
+        <Section
+          aria-label="Business Health Check introduction"
+          width="wide"
+          className="bg-gradient-to-b from-electric-50 to-white py-8 md:py-14"
+        >
           <div className="grid items-center gap-6 md:grid-cols-12 md:gap-8 lg:gap-12">
             <div className="min-w-0 md:col-span-7">
               <p className="eyebrow text-brand-ink">Business Health Check</p>
@@ -453,15 +563,6 @@ export function FdiDiagnosticFlow() {
               <p className="mt-4 max-w-lg font-body text-[length:var(--step-0)] leading-relaxed text-muted">
                 A free check of how much day-to-day operations still rely on you.
               </p>
-              <div className="mt-6 flex flex-col items-stretch gap-2 sm:items-start">
-                <Button onClick={startFromIntro} disabled={isWorking} className="cta-shine min-h-[52px] w-full px-4 sm:w-auto sm:px-5">
-                  {isWorking ? 'Starting…' : 'Start the Business Health Check →'}
-                </Button>
-                <a href="#check-covers" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl font-body text-xs font-medium text-muted transition-colors duration-200 hover:text-brand-ink sm:justify-start">
-                  See what the check covers
-                  <ChevronDown className="h-4 w-4" aria-hidden="true" />
-                </a>
-              </div>
               {error && (
                 <p role="alert" aria-live="assertive" className="mt-4 font-body text-[length:var(--step-0)] text-danger">
                   {error}
@@ -472,6 +573,20 @@ export function FdiDiagnosticFlow() {
               <IntroArtwork />
             </div>
           </div>
+
+          <IntroSignalFlow />
+
+          <div className="mt-8 flex flex-col items-center gap-2 md:mt-12">
+            <Button onClick={startFromIntro} disabled={isWorking} className="cta-shine min-h-[52px] w-full px-3 sm:w-auto sm:min-w-[22rem] sm:px-8">
+              {isWorking ? 'Starting…' : 'Start the Business Health Check →'}
+            </Button>
+            <a href="#check-covers" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl font-body text-xs font-medium text-muted transition-colors duration-200 hover:text-brand-ink">
+              See what the check covers
+              <ChevronDown className="h-4 w-4" aria-hidden="true" />
+            </a>
+          </div>
+
+          <IntroAssurances />
         </Section>
 
         <IntroMechanism />
