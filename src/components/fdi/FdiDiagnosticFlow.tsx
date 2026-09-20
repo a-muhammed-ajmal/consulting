@@ -148,7 +148,7 @@ async function responseJson<T extends ApiResponse>(response: Response): Promise<
 function DiagnosticHeader({ onExit }: { readonly onExit?: () => void }) {
   return (
     <header className="relative z-20 border-b border-line bg-white">
-      <div className="flex min-h-16 items-center justify-between gap-3 px-5 md:px-8">
+      <div className="flex min-h-16 items-center justify-between gap-3 px-5 py-3 md:px-8">
         {onExit ? (
           <button
             type="button"
@@ -156,11 +156,11 @@ function DiagnosticHeader({ onExit }: { readonly onExit?: () => void }) {
             aria-label="Exit the Business Health Check and return home"
             className="inline-flex min-h-11 items-center rounded-xl"
           >
-            <BrandLockup className="h-10 sm:h-11" eager />
+            <BrandLockup className="h-10 sm:h-[52px]" eager />
           </button>
         ) : (
           <Link href="/" aria-label="Muhammed Ajmal Consulting home" className="inline-flex min-h-11 items-center rounded-xl">
-            <BrandLockup className="h-10 sm:h-11" eager />
+            <BrandLockup className="h-10 sm:h-[52px]" eager />
           </Link>
         )}
         {onExit ? (
@@ -474,9 +474,9 @@ export function FdiDiagnosticFlow() {
     return (
       <div id="diagnostic-landing" className="min-h-svh bg-white">
         <header className="border-b border-line bg-white">
-          <div className="mx-auto flex min-h-16 max-w-7xl items-center justify-between gap-4 px-6">
+          <div className="mx-auto flex min-h-16 max-w-7xl items-center justify-between gap-4 px-6 py-3">
             <Link href="/" aria-label="Muhammed Ajmal Consulting home" className="inline-flex min-h-11 items-center rounded-xl">
-              <BrandLockup className="h-10 sm:h-11" eager />
+              <BrandLockup className="h-10 sm:h-[52px]" eager />
             </Link>
             <div className="flex items-center gap-6">
               <p className="hidden font-body text-xs font-medium text-muted md:block">Free · Private · Focused</p>

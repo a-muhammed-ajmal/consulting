@@ -15,7 +15,7 @@ export function BrandLockup({
   alt = "Muhammed Ajmal Consulting",
   className,
   eager = false,
-  sizes = "(min-width: 640px) 131px, 119px",
+  sizes = "(min-width: 640px) 154px, 119px",
 }: BrandLogoProps) {
   return (
     <Image

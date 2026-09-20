@@ -48,7 +48,7 @@ export function Navigation() {
     <nav className={cn("sticky top-0 z-50 border-b border-line bg-white/80 px-4 py-3 text-ink backdrop-blur-md backdrop-saturate-150 transition-all duration-200 md:px-6", scrolled && "border-line-strong shadow-2")}>
       <div className="mx-auto flex max-w-7xl items-center justify-between">
         <Link href="/" className="flex min-h-[44px] items-center transition-opacity hover:opacity-90">
-          <BrandLockup className="h-10 sm:h-11" eager />
+          <BrandLockup className="h-10 sm:h-[52px]" eager />
         </Link>
 
         <div className="hidden gap-6 font-body text-[length:var(--step-0)] font-medium tracking-wide lg:flex">
