@@ -28,7 +28,7 @@ describe('FDI-1.1 intro requirements', () => {
     expect(source).toContain('width={1200}');
     expect(source).toContain('height={1500}');
     /* object-cover is what lets the panel stand full height beside the copy. */
-    expect(source).toContain('className="absolute inset-0 h-full w-full object-cover"');
+    expect(source).toContain('className="absolute inset-0 h-full w-full object-cover object-top"');
     /* The quote sits on the sky, so it carries its own scrim rather than trusting the crop. */
     expect(source).toContain('A stronger business. A freer founder.');
     /* The LCP element on this route. `priority` preloads it, and the optimizer
@@ -47,8 +47,11 @@ describe('FDI-1.1 intro requirements', () => {
 
   it('opens with the mechanism, the owner-approved assurances, and no invented reading', () => {
     const intro = source.slice(source.indexOf("  if (stage === 'intro')"), source.indexOf("  if (stage === 'submitting')"));
-    expect(intro).toContain('<IntroSignalFlow />');
     expect(intro).toContain('<IntroAssurances />');
+    /* The three signals are stated once, by IntroMechanism directly below. A second
+       copy in the hero is duplication, not emphasis. */
+    expect(source).not.toContain('IntroSignalFlow');
+    expect(source).not.toContain('short:');
     /* Owner-approved hero copy. Recorded against WEB SS8 so a later pass does not
        read these as unsupported claims and strip them. */
     expect(source).toContain('A stronger business. A freer founder.');
@@ -61,15 +64,6 @@ describe('FDI-1.1 intro requirements', () => {
     expect(intro).not.toMatch(/\d+\s*\/\s*100/);
     expect(intro).not.toContain('%');
     expect(intro).not.toMatch(/(Low|Moderate|High|Very High) Founder Dependency/);
-  });
-
-  it('abbreviates the three signals in the hero without restating their labels', () => {
-    expect(source).toContain("short: 'Can decisions continue?'");
-    expect(source).toContain("short: 'Can work maintain its standard?'");
-    expect(source).toContain(`short: "Can you see what's happening?"`);
-    /* The hero reads the same constant the fuller section below it does, so the
-       three labels cannot drift apart. */
-    expect(source.match(/const INDEX_COMPONENTS/g)).toHaveLength(1);
   });
 
   it('makes only the intro a scrollable landing page with native sections and readable facts', () => {

@@ -296,10 +296,10 @@ The opening panel carries a generated photograph, not a photograph of a
 client, an employee, or the consultant. It stands as illustration only
 and is never captioned or implied to depict a real engagement.
 
-The opening section also renders the mechanism as a figure: the three
-operating components feed the 12 questions, which return the Founder
-Dependency Index. The index appears there as its full name and a glyph
-only. No number, band label, filled meter, or sample reading appears
+The three operating components are stated once, in the section that
+follows the opening one. The opening section does not restate them.
+
+No number, band label, filled meter, or sample reading appears anywhere
 before the founder has answered.
 
 ### Results — /results

@@ -82,8 +82,6 @@ interface IndexComponent {
   readonly key: 'DS' | 'EC' | 'OV';
   readonly label: string;
   readonly description: string;
-  /** The hero diagram's abbreviated form. `description` carries the full question. */
-  readonly short: string;
   readonly icon: LucideIcon;
 }
 
@@ -93,21 +91,18 @@ const INDEX_COMPONENTS: readonly IndexComponent[] = [
     key: 'DS',
     label: 'Decision Speed',
     description: 'Can decisions continue without you?',
-    short: 'Can decisions continue?',
     icon: Zap,
   },
   {
     key: 'EC',
     label: 'Execution Consistency',
     description: 'Can recurring work maintain its standard?',
-    short: 'Can work maintain its standard?',
     icon: Settings2,
   },
   {
     key: 'OV',
     label: 'Operational Visibility',
     description: 'Can you see what is happening without chasing updates?',
-    short: "Can you see what's happening?",
     icon: BarChart3,
   },
 ];
@@ -243,7 +238,7 @@ function IntroFacts() {
  */
 function IntroArtwork() {
   return (
-    <figure className="relative isolate mx-auto aspect-[4/5] w-full max-w-sm overflow-hidden rounded-3xl border border-line lg:aspect-auto lg:h-full lg:max-w-none">
+    <figure className="relative isolate mx-auto aspect-[4/5] w-full max-w-sm overflow-hidden rounded-3xl border border-line md:aspect-auto md:h-full md:min-h-[22rem] md:max-w-none">
       <Image
         src="/images/diagnostic/founder-skyline.jpg"
         alt="A founder in a suit looking out over the Dubai skyline"
@@ -251,71 +246,13 @@ function IntroArtwork() {
         height={1500}
         sizes="(min-width: 1280px) 500px, (min-width: 1024px) 320px, (min-width: 768px) 512px, 100vw"
         priority
-        className="absolute inset-0 h-full w-full object-cover"
+        className="absolute inset-0 h-full w-full object-cover object-top"
       />
       <div className="pointer-events-none absolute inset-x-0 top-0 h-2/5 bg-gradient-to-b from-white/85 via-white/45 to-transparent" aria-hidden="true" />
       <figcaption className="relative ml-auto max-w-[13rem] p-5 text-right font-heading text-[length:var(--step-0)] font-semibold italic leading-snug text-ink md:max-w-[15rem] md:p-6 md:text-[length:var(--step-3)]">
         A stronger business. A freer founder.
       </figcaption>
     </figure>
-  );
-}
-
-/**
- * The mechanism in one figure: three operating signals feed twelve questions,
- * which return the index.
- *
- * Connectors are CSS borders rather than an SVG for the reason recorded in
- * `src/components/home/Graphics.tsx` — a scaled drawing collapses below the
- * legible floor on a 375px screen. The bracket stretches to the card column's
- * own height, so it stays aligned when a label wraps to a second line.
- *
- * The index card shows a glyph and its name only. Rendering a number, a filled
- * meter, or a sample band here would be an invented reading (DESIGN SS7).
- */
-function IntroSignalFlow() {
-  return (
-    <div className="mt-6 flex flex-col items-center gap-4 md:mt-7 md:flex-row md:justify-center md:gap-0 lg:justify-start">
-      <ul className="flex w-full max-w-sm flex-col gap-3 md:w-72 md:max-w-none md:shrink-0">
-        {INDEX_COMPONENTS.map(({ key, label, short, icon: Icon }) => (
-          <li key={key} className="flex min-w-0 items-center gap-3 rounded-2xl border border-line bg-white p-3 shadow-1">
-            <span
-              className={cn(
-                'flex h-10 w-10 shrink-0 items-center justify-center rounded-xl',
-                key === 'EC' ? 'bg-accent text-ink' : 'bg-brand text-white',
-              )}
-              aria-hidden="true"
-            >
-              <Icon className="h-5 w-5" />
-            </span>
-            <div className="min-w-0">
-              <p className="font-heading text-[length:var(--step-0)] font-bold leading-snug text-ink">{label}</p>
-              <p className="mt-0.5 font-body text-xs leading-snug text-muted">{short}</p>
-            </div>
-          </li>
-        ))}
-      </ul>
-
-      <span
-        className="h-5 w-0.5 shrink-0 bg-brand/40 md:my-9 md:h-auto md:w-5 md:self-stretch md:rounded-r-2xl md:border-y-2 md:border-r-2 md:border-brand/40 md:bg-transparent"
-        aria-hidden="true"
-      />
-      <span className="hidden shrink-0 md:block md:h-0.5 md:w-4 md:bg-brand/40" aria-hidden="true" />
-
-      <div className="flex h-24 w-24 shrink-0 flex-col items-center justify-center rounded-full bg-canvas-dark text-white xl:h-28 xl:w-28">
-        <span className="font-heading text-[length:var(--step-3)] font-extrabold leading-none md:text-[length:var(--step-4)]">12</span>
-        <span className="mt-1 font-body text-[length:var(--step--1)] font-medium uppercase leading-none text-muted-invert">Questions</span>
-      </div>
-
-      <ArrowRight className="h-6 w-6 shrink-0 rotate-90 text-brand md:mx-3 md:rotate-0" aria-hidden="true" />
-
-      <Surface className="flex w-full max-w-sm items-center gap-3 p-4 md:w-36 md:max-w-none md:shrink-0 md:flex-col md:text-center">
-        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-soft text-brand-ink" aria-hidden="true">
-          <BarChart3 className="h-5 w-5" />
-        </span>
-        <p className="font-heading text-[length:var(--step-0)] font-bold leading-snug text-ink">Your Founder Dependency Index</p>
-      </Surface>
-    </div>
   );
 }
 
@@ -558,14 +495,13 @@ export function FdiDiagnosticFlow() {
           width="wide"
           className="bg-gradient-to-b from-electric-50 to-white py-6 md:py-9"
         >
-          {/* Three blocks in one grid. Stacked, they read copy -> artwork -> mechanism
-              -> action. From lg, explicit row and column placement puts the copy and
-              the mechanism in one column with the artwork standing beside both, without
-              reordering the DOM away from the stacked reading order. */}
-          <div className="lg:grid lg:grid-cols-12 lg:gap-10">
-            <div className="min-w-0 lg:col-span-8 lg:col-start-1 lg:row-start-1 lg:self-end xl:col-span-7">
+          {/* Three blocks in one grid. Stacked, they read copy -> artwork -> action.
+              From md, explicit row and column placement keeps that order while the
+              artwork stands beside both text blocks. */}
+          <div className="md:grid md:grid-cols-12 md:gap-8 lg:gap-12">
+            <div className="min-w-0 md:col-span-7 md:col-start-1 md:row-start-1 md:self-end">
               <p className="eyebrow text-brand-ink">Business Health Check</p>
-              <h1 id="diagnostic-intro-title" className="mt-3 max-w-xl font-heading text-[length:var(--step-5)] font-extrabold leading-tight text-ink md:text-[length:var(--step-4)] lg:max-w-2xl lg:text-[length:var(--step-5)]">
+              <h1 id="diagnostic-intro-title" className="mt-3 max-w-xl font-heading text-[length:var(--step-5)] font-extrabold leading-tight text-ink md:text-[length:var(--step-4)] lg:text-[length:var(--step-5)]">
                 How much does your business still <span className="brand-gradient-text">depend on you?</span>
               </h1>
               <p className="mt-4 max-w-lg font-body text-[length:var(--step-0)] leading-relaxed text-muted">
@@ -578,22 +514,18 @@ export function FdiDiagnosticFlow() {
               )}
             </div>
 
-            <div className="mt-6 min-w-0 lg:col-span-4 lg:col-start-9 lg:row-span-2 lg:row-start-1 lg:mt-0 xl:col-span-5 xl:col-start-8">
+            <div className="mt-6 min-w-0 md:col-span-5 md:col-start-8 md:row-span-2 md:row-start-1 md:mt-0">
               <IntroArtwork />
             </div>
 
-            <div className="min-w-0 lg:col-span-8 lg:col-start-1 lg:row-start-2 xl:col-span-7">
-              <IntroSignalFlow />
-
-              <div className="mt-6 flex flex-col items-center gap-2 md:mt-7 lg:items-start">
-                <Button onClick={startFromIntro} disabled={isWorking} className="cta-shine min-h-[52px] w-full px-3 sm:w-auto sm:min-w-[22rem] sm:px-8">
-                  {isWorking ? 'Starting…' : 'Start the Business Health Check →'}
-                </Button>
-                <a href="#check-covers" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl font-body text-xs font-medium text-muted transition-colors duration-200 hover:text-brand-ink">
-                  See what the check covers
-                  <ChevronDown className="h-4 w-4" aria-hidden="true" />
-                </a>
-              </div>
+            <div className="mt-7 flex flex-col items-center gap-2 md:col-span-7 md:col-start-1 md:row-start-2 md:mt-0 md:items-start">
+              <Button onClick={startFromIntro} disabled={isWorking} className="cta-shine min-h-[52px] w-full px-3 sm:w-auto sm:min-w-[22rem] sm:px-8">
+                {isWorking ? 'Starting…' : 'Start the Business Health Check →'}
+              </Button>
+              <a href="#check-covers" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl font-body text-xs font-medium text-muted transition-colors duration-200 hover:text-brand-ink">
+                See what the check covers
+                <ChevronDown className="h-4 w-4" aria-hidden="true" />
+              </a>
             </div>
           </div>
 
