@@ -156,11 +156,11 @@ function DiagnosticHeader({ onExit }: { readonly onExit?: () => void }) {
             aria-label="Exit the Business Health Check and return home"
             className="inline-flex min-h-11 items-center rounded-xl"
           >
-            <BrandLockup className="h-10 sm:h-[52px]" eager />
+            <BrandLockup className="h-8 sm:h-10 lg:h-8 xl:h-11" eager />
           </button>
         ) : (
           <Link href="/" aria-label="Muhammed Ajmal Consulting home" className="inline-flex min-h-11 items-center rounded-xl">
-            <BrandLockup className="h-10 sm:h-[52px]" eager />
+            <BrandLockup className="h-8 sm:h-10 lg:h-8 xl:h-11" eager />
           </Link>
         )}
         {onExit ? (
@@ -476,7 +476,7 @@ export function FdiDiagnosticFlow() {
         <header className="border-b border-line bg-white">
           <div className="mx-auto flex min-h-16 max-w-7xl items-center justify-between gap-4 px-6 py-3">
             <Link href="/" aria-label="Muhammed Ajmal Consulting home" className="inline-flex min-h-11 items-center rounded-xl">
-              <BrandLockup className="h-10 sm:h-[52px]" eager />
+              <BrandLockup className="h-8 sm:h-10 lg:h-8 xl:h-11" eager />
             </Link>
             <div className="flex items-center gap-6">
               <p className="hidden font-body text-xs font-medium text-muted md:block">Free · Private · Focused</p>
