@@ -23,7 +23,8 @@ describe('FDI-1.1 intro requirements', () => {
 
   it('uses the founder artwork as a supporting illustration, not a cropped infographic', () => {
     expect(source).toContain('src="/images/diagnostic/founder-operations.png"');
-    expect(source).toContain('sizes="(min-width: 1024px) 480px, (min-width: 768px) 360px, 100vw"');
+    /* Tracks the artwork column: 5-of-12 at xl, 4-of-12 at lg, max-w-lg while stacked. */
+    expect(source).toContain('sizes="(min-width: 1280px) 500px, (min-width: 1024px) 320px, (min-width: 768px) 512px, 100vw"');
     expect(source).toContain('width={1536}');
     expect(source).toContain('height={1024}');
     expect(source).toContain('className="h-full w-full object-contain"');

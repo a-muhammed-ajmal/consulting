@@ -240,18 +240,18 @@ function IntroFacts() {
  */
 function IntroArtwork() {
   return (
-    <figure className="relative isolate mx-auto w-full max-w-lg overflow-hidden rounded-3xl border border-line bg-gradient-to-b from-electric-50 via-brand-tint to-white p-5 md:p-6">
+    <figure className="relative isolate mx-auto flex w-full max-w-lg flex-col overflow-hidden rounded-3xl border border-line bg-gradient-to-b from-electric-50 via-brand-tint to-white p-5 md:p-6 lg:max-w-none">
       <p className="ml-auto max-w-[13rem] text-right font-heading text-[length:var(--step-0)] font-semibold italic leading-snug text-ink md:max-w-[15rem] md:text-[length:var(--step-3)]">
         A stronger business. A freer founder.
       </p>
-      <div className="relative mt-4 aspect-[3/2] w-full">
-        <div className="pointer-events-none absolute inset-y-2 right-2 -z-10 aspect-square rounded-full bg-brand-soft" aria-hidden="true" />
+      <div className="relative mt-4 aspect-[3/2] w-full lg:my-auto">
+        <div className="pointer-events-none absolute right-0 top-1/2 -z-10 w-[82%] -translate-y-1/2 aspect-square rounded-full bg-brand-soft" aria-hidden="true" />
         <Image
           src="/images/diagnostic/founder-operations.png"
           alt="Illustration of a founder managing work at a laptop"
           width={1536}
           height={1024}
-          sizes="(min-width: 1024px) 480px, (min-width: 768px) 360px, 100vw"
+          sizes="(min-width: 1280px) 500px, (min-width: 1024px) 320px, (min-width: 768px) 512px, 100vw"
           priority
           className="h-full w-full object-contain"
         />
@@ -274,7 +274,7 @@ function IntroArtwork() {
  */
 function IntroSignalFlow() {
   return (
-    <div className="mt-8 flex flex-col items-center gap-4 md:mt-12 md:flex-row md:justify-center md:gap-0">
+    <div className="mt-6 flex flex-col items-center gap-4 md:mt-7 md:flex-row md:justify-center md:gap-0 lg:justify-start">
       <ul className="flex w-full max-w-sm flex-col gap-3 md:w-72 md:max-w-none md:shrink-0">
         {INDEX_COMPONENTS.map(({ key, label, short, icon: Icon }) => (
           <li key={key} className="flex min-w-0 items-center gap-3 rounded-2xl border border-line bg-white p-3 shadow-1">
@@ -296,19 +296,19 @@ function IntroSignalFlow() {
       </ul>
 
       <span
-        className="h-5 w-0.5 shrink-0 bg-brand/40 md:my-10 md:h-auto md:w-6 md:self-stretch md:rounded-r-2xl md:border-y-2 md:border-r-2 md:border-brand/40 md:bg-transparent"
+        className="h-5 w-0.5 shrink-0 bg-brand/40 md:my-9 md:h-auto md:w-5 md:self-stretch md:rounded-r-2xl md:border-y-2 md:border-r-2 md:border-brand/40 md:bg-transparent"
         aria-hidden="true"
       />
-      <span className="hidden shrink-0 md:block md:h-0.5 md:w-5 md:bg-brand/40" aria-hidden="true" />
+      <span className="hidden shrink-0 md:block md:h-0.5 md:w-4 md:bg-brand/40" aria-hidden="true" />
 
-      <div className="flex h-24 w-24 shrink-0 flex-col items-center justify-center rounded-full bg-canvas-dark text-white md:h-28 md:w-28">
+      <div className="flex h-24 w-24 shrink-0 flex-col items-center justify-center rounded-full bg-canvas-dark text-white xl:h-28 xl:w-28">
         <span className="font-heading text-[length:var(--step-3)] font-extrabold leading-none md:text-[length:var(--step-4)]">12</span>
         <span className="mt-1 font-body text-[length:var(--step--1)] font-medium uppercase leading-none text-muted-invert">Questions</span>
       </div>
 
-      <ArrowRight className="h-6 w-6 shrink-0 rotate-90 text-brand md:mx-4 md:rotate-0" aria-hidden="true" />
+      <ArrowRight className="h-6 w-6 shrink-0 rotate-90 text-brand md:mx-3 md:rotate-0" aria-hidden="true" />
 
-      <Surface className="flex w-full max-w-sm items-center gap-3 p-4 md:w-48 md:max-w-none md:shrink-0 md:flex-col md:text-center">
+      <Surface className="flex w-full max-w-sm items-center gap-3 p-4 md:w-36 md:max-w-none md:shrink-0 md:flex-col md:text-center">
         <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-soft text-brand-ink" aria-hidden="true">
           <BarChart3 className="h-5 w-5" />
         </span>
@@ -326,7 +326,7 @@ function IntroSignalFlow() {
  */
 function IntroAssurances() {
   return (
-    <ul className="mx-auto mt-8 grid max-w-4xl gap-4 border-t border-line pt-6 min-[420px]:grid-cols-3 md:mt-12 md:gap-6 md:pt-8">
+    <ul className="mx-auto mt-6 grid max-w-4xl gap-4 border-t border-line pt-5 min-[420px]:grid-cols-3 md:mt-8 md:gap-6 md:pt-6">
       {HERO_ASSURANCES.map(([title, note, Icon]) => (
         <li key={title} className="flex min-w-0 items-center gap-3 min-[420px]:justify-center">
           <Icon className="h-6 w-6 shrink-0 text-brand-ink" aria-hidden="true" />
@@ -549,15 +549,22 @@ export function FdiDiagnosticFlow() {
           </div>
         </header>
 
+        {/* One screen, not two. Below lg the blocks stack in reading order; from lg
+            the copy, the mechanism, and the action share an 8-of-12 column with the
+            artwork standing full height beside them. */}
         <Section
           aria-label="Business Health Check introduction"
           width="wide"
-          className="bg-gradient-to-b from-electric-50 to-white py-8 md:py-14"
+          className="bg-gradient-to-b from-electric-50 to-white py-6 md:py-9"
         >
-          <div className="grid items-center gap-6 md:grid-cols-12 md:gap-8 lg:gap-12">
-            <div className="min-w-0 md:col-span-7">
+          {/* Three blocks in one grid. Stacked, they read copy -> artwork -> mechanism
+              -> action. From lg, explicit row and column placement puts the copy and
+              the mechanism in one column with the artwork standing beside both, without
+              reordering the DOM away from the stacked reading order. */}
+          <div className="lg:grid lg:grid-cols-12 lg:gap-10">
+            <div className="min-w-0 lg:col-span-8 lg:col-start-1 lg:row-start-1 lg:self-end xl:col-span-7">
               <p className="eyebrow text-brand-ink">Business Health Check</p>
-              <h1 id="diagnostic-intro-title" className="mt-3 max-w-xl font-heading text-[length:var(--step-5)] font-extrabold leading-tight text-ink md:text-[length:var(--step-4)] lg:text-[length:var(--step-5)]">
+              <h1 id="diagnostic-intro-title" className="mt-3 max-w-xl font-heading text-[length:var(--step-5)] font-extrabold leading-tight text-ink md:text-[length:var(--step-4)] lg:max-w-2xl lg:text-[length:var(--step-5)]">
                 How much does your business still <span className="brand-gradient-text">depend on you?</span>
               </h1>
               <p className="mt-4 max-w-lg font-body text-[length:var(--step-0)] leading-relaxed text-muted">
@@ -569,21 +576,24 @@ export function FdiDiagnosticFlow() {
                 </p>
               )}
             </div>
-            <div className="min-w-0 md:col-span-5">
+
+            <div className="mt-6 min-w-0 lg:col-span-4 lg:col-start-9 lg:row-span-2 lg:row-start-1 lg:mt-0 lg:self-center xl:col-span-5 xl:col-start-8">
               <IntroArtwork />
             </div>
-          </div>
 
-          <IntroSignalFlow />
+            <div className="min-w-0 lg:col-span-8 lg:col-start-1 lg:row-start-2 xl:col-span-7">
+              <IntroSignalFlow />
 
-          <div className="mt-8 flex flex-col items-center gap-2 md:mt-12">
-            <Button onClick={startFromIntro} disabled={isWorking} className="cta-shine min-h-[52px] w-full px-3 sm:w-auto sm:min-w-[22rem] sm:px-8">
-              {isWorking ? 'Starting…' : 'Start the Business Health Check →'}
-            </Button>
-            <a href="#check-covers" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl font-body text-xs font-medium text-muted transition-colors duration-200 hover:text-brand-ink">
-              See what the check covers
-              <ChevronDown className="h-4 w-4" aria-hidden="true" />
-            </a>
+              <div className="mt-6 flex flex-col items-center gap-2 md:mt-7 lg:items-start">
+                <Button onClick={startFromIntro} disabled={isWorking} className="cta-shine min-h-[52px] w-full px-3 sm:w-auto sm:min-w-[22rem] sm:px-8">
+                  {isWorking ? 'Starting…' : 'Start the Business Health Check →'}
+                </Button>
+                <a href="#check-covers" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl font-body text-xs font-medium text-muted transition-colors duration-200 hover:text-brand-ink">
+                  See what the check covers
+                  <ChevronDown className="h-4 w-4" aria-hidden="true" />
+                </a>
+              </div>
+            </div>
           </div>
 
           <IntroAssurances />
