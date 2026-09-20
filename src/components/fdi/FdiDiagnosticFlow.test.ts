@@ -21,13 +21,16 @@ describe('FDI-1.1 intro requirements', () => {
     expect(source).not.toContain('IndexBandList');
   });
 
-  it('uses the founder artwork as a supporting illustration, not a cropped infographic', () => {
-    expect(source).toContain('src="/images/diagnostic/founder-operations.png"');
-    /* Tracks the artwork column: 5-of-12 at xl, 4-of-12 at lg, max-w-lg while stacked. */
+  it('uses the founder photograph full bleed, cropping rather than letterboxing', () => {
+    expect(source).toContain('src="/images/diagnostic/founder-skyline.jpg"');
+    /* Tracks the artwork column: 5-of-12 at xl, 4-of-12 at lg, max-w-sm while stacked. */
     expect(source).toContain('sizes="(min-width: 1280px) 500px, (min-width: 1024px) 320px, (min-width: 768px) 512px, 100vw"');
-    expect(source).toContain('width={1536}');
-    expect(source).toContain('height={1024}');
-    expect(source).toContain('className="h-full w-full object-contain"');
+    expect(source).toContain('width={1200}');
+    expect(source).toContain('height={1500}');
+    /* object-cover is what lets the panel stand full height beside the copy. */
+    expect(source).toContain('className="absolute inset-0 h-full w-full object-cover"');
+    /* The quote sits on the sky, so it carries its own scrim rather than trusting the crop. */
+    expect(source).toContain('A stronger business. A freer founder.');
     /* The LCP element on this route. `priority` preloads it, and the optimizer
        has to stay on: the source PNG is 1.5 MB, which `unoptimized` would ship
        whole to every phone. */
@@ -36,11 +39,10 @@ describe('FDI-1.1 intro requirements', () => {
     expect(source).not.toContain('grid-cols-[64px_24px_minmax(0,1fr)]');
     expect(source).not.toContain('grid items-stretch');
     expect(source).not.toContain('function FlowConnector');
-    const artwork = readFileSync(join(process.cwd(), 'public', 'images', 'diagnostic', 'founder-operations.png'));
-    expect(artwork.subarray(0, 8).toString('hex')).toBe('89504e470d0a1a0a');
-    expect(artwork.readUInt32BE(16)).toBeGreaterThan(0);
-    expect(artwork.readUInt32BE(20)).toBeGreaterThan(0);
-    expect(artwork[25]).toBe(6); // RGBA: preserve the extracted artwork's transparency.
+    const artwork = readFileSync(join(process.cwd(), 'public', 'images', 'diagnostic', 'founder-skyline.jpg'));
+    expect(artwork.subarray(0, 3).toString('hex')).toBe('ffd8ff'); // JPEG SOI + marker.
+    /* A photograph in the LCP slot has to stay small enough to be worth shipping. */
+    expect(artwork.byteLength).toBeLessThan(400_000);
   });
 
   it('opens with the mechanism, the owner-approved assurances, and no invented reading', () => {

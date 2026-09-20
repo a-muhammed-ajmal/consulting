@@ -292,6 +292,10 @@ claims and remove them.
 measured figure. It is never presented as a result, a benchmark, or a
 claim about the business.
 
+The opening panel carries a generated photograph, not a photograph of a
+client, an employee, or the consultant. It stands as illustration only
+and is never captioned or implied to depict a real engagement.
+
 The opening section also renders the mechanism as a figure: the three
 operating components feed the 12 questions, which return the Founder
 Dependency Index. The index appears there as its full name and a glyph

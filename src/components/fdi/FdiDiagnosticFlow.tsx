@@ -231,31 +231,32 @@ function IntroFacts() {
 }
 
 /**
- * The opening panel: the founder illustration under its pull-quote, inside a
- * framed wash.
+ * The opening panel: the founder photograph, full bleed, under its pull-quote.
  *
- * The image is the LCP element on this route, so it carries `priority` rather
- * than `loading="eager"` and goes through the Next optimizer — the source PNG is
- * 1.5 MB, and AVIF/WebP preserve its alpha at roughly a tenth of the bytes.
+ * The photograph is the LCP element on this route, so it carries `priority` and
+ * goes through the Next optimizer. `object-cover` lets it crop to whatever height
+ * the copy column sets, which is why the panel can stand full height beside the
+ * copy without letterboxing.
+ *
+ * The quote sits on the sky. A white scrim under it keeps that text legible
+ * whatever the crop exposes, rather than trusting one fixed region of the image.
  */
 function IntroArtwork() {
   return (
-    <figure className="relative isolate mx-auto flex w-full max-w-lg flex-col overflow-hidden rounded-3xl border border-line bg-gradient-to-b from-electric-50 via-brand-tint to-white p-5 md:p-6 lg:max-w-none">
-      <p className="ml-auto max-w-[13rem] text-right font-heading text-[length:var(--step-0)] font-semibold italic leading-snug text-ink md:max-w-[15rem] md:text-[length:var(--step-3)]">
+    <figure className="relative isolate mx-auto aspect-[4/5] w-full max-w-sm overflow-hidden rounded-3xl border border-line lg:aspect-auto lg:h-full lg:max-w-none">
+      <Image
+        src="/images/diagnostic/founder-skyline.jpg"
+        alt="A founder in a suit looking out over the Dubai skyline"
+        width={1200}
+        height={1500}
+        sizes="(min-width: 1280px) 500px, (min-width: 1024px) 320px, (min-width: 768px) 512px, 100vw"
+        priority
+        className="absolute inset-0 h-full w-full object-cover"
+      />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-2/5 bg-gradient-to-b from-white/85 via-white/45 to-transparent" aria-hidden="true" />
+      <figcaption className="relative ml-auto max-w-[13rem] p-5 text-right font-heading text-[length:var(--step-0)] font-semibold italic leading-snug text-ink md:max-w-[15rem] md:p-6 md:text-[length:var(--step-3)]">
         A stronger business. A freer founder.
-      </p>
-      <div className="relative mt-4 aspect-[3/2] w-full lg:my-auto">
-        <div className="pointer-events-none absolute right-0 top-1/2 -z-10 w-[82%] -translate-y-1/2 aspect-square rounded-full bg-brand-soft" aria-hidden="true" />
-        <Image
-          src="/images/diagnostic/founder-operations.png"
-          alt="Illustration of a founder managing work at a laptop"
-          width={1536}
-          height={1024}
-          sizes="(min-width: 1280px) 500px, (min-width: 1024px) 320px, (min-width: 768px) 512px, 100vw"
-          priority
-          className="h-full w-full object-contain"
-        />
-      </div>
+      </figcaption>
     </figure>
   );
 }
@@ -577,7 +578,7 @@ export function FdiDiagnosticFlow() {
               )}
             </div>
 
-            <div className="mt-6 min-w-0 lg:col-span-4 lg:col-start-9 lg:row-span-2 lg:row-start-1 lg:mt-0 lg:self-center xl:col-span-5 xl:col-start-8">
+            <div className="mt-6 min-w-0 lg:col-span-4 lg:col-start-9 lg:row-span-2 lg:row-start-1 lg:mt-0 xl:col-span-5 xl:col-start-8">
               <IntroArtwork />
             </div>
 
